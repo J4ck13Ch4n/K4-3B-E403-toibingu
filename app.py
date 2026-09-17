@@ -164,6 +164,14 @@ def advance(session, text, evaluator=None):
     criteria = session.get('rubric', CRITERIA)
     checks, response_id = evaluator(messages) if evaluator else evaluate(messages, criteria)
     checks = validate_checks(checks, messages, criteria)
+    previous_met = {c['id'] for c in session['checks'] if c['status'] == 'met'}
+    newly_met = {c['id'] for c in checks if c['status'] == 'met'} - previous_met
+    understood = [c['label'] for c in criteria if c['id'] in newly_met]
+    acknowledgement = ('À, mình đã hiểu phần ' + ', '.join(f'“{label}”' for label in understood)
+                       + ' qua lời giải thích của cậu rồi.\n\n') if understood else ''
+    current_target = session['target']
+    if current_target is None and session.get('lesson_id'):
+        current_target = criteria[0]['id']
     session['turn'] += 1
     if session['turn'] == 1:
         session['initial'] = [c['id'] for c in checks if c['status'] == 'met']
@@ -175,13 +183,15 @@ def advance(session, text, evaluator=None):
         reply = f'À, mình hiểu rồi! Cậu đã giải thích được cả {len(criteria)} điểm của phần này. Cảm ơn cậu đã dạy mình nhé.'
     elif session['probes'] >= 3:
         session['status'] = 'review'
-        reply = 'Mình cùng tạm dừng ở đây nhé. Cậu đã đi qua 3 câu hỏi gợi mở. Hãy xem lại những đoạn tài liệu được gợi ý bên dưới, rồi thử dạy mình một lần nữa.'
+        reply = acknowledgement + 'Mình cùng tạm dừng ở đây nhé. Cậu đã đi qua 3 câu hỏi gợi mở. Hãy xem lại những đoạn tài liệu được gợi ý bên dưới, rồi thử dạy mình một lần nữa.'
     else:
-        # Prefer an actual misconception to a missing concept.
-        gap = next((c for c in gaps if c['status'] == 'incorrect'), gaps[0])
+        # Finish the question being discussed before moving to another one.
+        pending = next((c for c in gaps if c['id'] == current_target), None)
+        gap = pending or next((c for c in gaps if c['status'] == 'incorrect'), gaps[0])
         session['target'] = gap['id']
         session['probes'] += 1
-        reply = next(c['question'] for c in criteria if c['id'] == gap['id'])
+        transition = 'Mình muốn làm rõ thêm câu này nhé: ' if pending else 'Mình hỏi tiếp nhé: '
+        reply = acknowledgement + transition + next(c['question'] for c in criteria if c['id'] == gap['id'])
     session['messages'] = messages + [{'role': 'assistant', 'text': reply}]
     session['updated_at'] = datetime.now(timezone.utc).isoformat()
     return session

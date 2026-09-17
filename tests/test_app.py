@@ -55,8 +55,11 @@ class FlowTests(unittest.TestCase):
     def test_misconception_prioritized_and_retracted(self):
         app.advance(self.session, 'Lần đầu.', evaluator(['met'] * 4 + ['missing']))
         app.advance(self.session, 'Mâu thuẫn.', evaluator(['incorrect'] + ['met'] * 3 + ['missing']))
-        self.assertEqual(self.session['target'], 'definition')
+        self.assertEqual(self.session['target'], 'sampling')
         self.assertEqual(self.session['checks'][0]['status'], 'incorrect')
+        app.advance(self.session, 'Làm rõ sampling.', evaluator(['incorrect'] + ['met'] * 4))
+        self.assertEqual(self.session['target'], 'definition')
+        self.assertIn('mình đã hiểu', self.session['messages'][-1]['text'])
 
     def test_failure_preserves_turn(self):
         before = copy.deepcopy(self.session)

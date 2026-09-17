@@ -91,5 +91,28 @@ class CurriculumTests(unittest.TestCase):
         self.assertEqual(evaluate.call_args.args[1],s['rubric'])
         self.assertEqual(s['probes'],1)
 
+    def test_acknowledge_before_next_question(self):
+        s=app.create_session('day1','ai_map')
+        def judge(messages):
+            return [{'id':c['id'],'status':'met' if i==0 else 'missing',
+                     'evidence':messages[-1]['text'] if i==0 else ''}
+                    for i,c in enumerate(s['rubric'])], 'mock'
+        app.advance(s,'Giải thích quan hệ giữa các nhóm AI.',judge)
+        reply=s['messages'][-1]['text']
+        self.assertLess(reply.index('mình đã hiểu'),reply.index(s['rubric'][1]['question']))
+        self.assertIn(s['rubric'][0]['label'],reply)
+        self.assertEqual(s['target'],s['rubric'][1]['id'])
+
+    def test_stay_on_unresolved_question_without_false_acknowledgement(self):
+        s=app.create_session('day1','ai_map')
+        def judge(_):
+            return [{'id':c['id'],'status':'missing' if i==0 else 'incorrect','evidence':'' if i==0 else 'Sai.'}
+                    for i,c in enumerate(s['rubric'])], 'mock'
+        app.advance(s,'Sai.',judge)
+        reply=s['messages'][-1]['text']
+        self.assertNotIn('đã hiểu',reply)
+        self.assertIn(s['rubric'][0]['question'],reply)
+        self.assertEqual(s['target'],s['rubric'][0]['id'])
+
 
 if __name__=='__main__':unittest.main()

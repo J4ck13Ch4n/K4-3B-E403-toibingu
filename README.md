@@ -34,7 +34,7 @@ Mở **http://127.0.0.1:8000**. Có thể đổi `PORT` và `OPENAI_MODEL` trong
 - Phòng dạy lại, giao diện responsive, lưu và khôi phục phiên khi tải lại trang.
 - Gọi OpenAI Responses API thật, Structured Outputs cho 3–4 tiêu chí của phần đang học; kiểm tra ID, trạng thái và bằng chứng nguyên văn phía server. Phiên cũ vẫn giữ 5 tiêu chí.
 - Đánh giá toàn hội thoại tích lũy, cho phép sửa sai và thu hồi tiêu chí khi phát biểu mới mâu thuẫn.
-- Một câu hỏi cố định cho mỗi tiêu chí, ưu tiên lỗi hiểu sai, không cho model tự sinh lời giải trong vai học trò.
+- Một câu hỏi cố định cho mỗi tiêu chí. Khi tiêu chí mới đạt, Mầm xác nhận đã hiểu phần đó trước khi hỏi tiếp. Nếu câu đang hỏi còn thiếu/sai, tiếp tục làm rõ câu đó; sau khi đạt mới chuyển sang điểm còn hổng (ưu tiên lỗi hiểu sai). Không sinh lời giải trong vai học trò.
 - Tối đa **3 câu hỏi gợi mở**, tức **1 lời giải thích đầu + 3 lời bổ sung**. Lượt thứ tư được đánh giá trước khi quyết định thành công hoặc xem lại.
 - Log gồm bằng chứng, từng lượt đánh giá, tiêu chí được hỏi và response ID để kiểm tra lời gọi thật. Tải JSON ở cuối phiên.
 - Kết quả tách “Tự giải thích đúng ngay”, “Bổ sung sau gợi mở” và “Cần xem lại”. Nhãn sau gợi mở tính mọi điểm bổ sung sau lượt đầu, không khẳng định quan hệ nhân quả với câu hỏi.
