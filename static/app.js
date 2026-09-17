@@ -1,64 +1,37 @@
-const $ = (id) => document.getElementById(id);
-let session = null, config = {ready:false, criteria:[]}, busy = false;
-const escapeHtml = (text) => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const notes = {
-  definition:'Temperature điều chỉnh phân bố xác suất khi lấy mẫu token tiếp theo. “Độ sáng tạo” là cách nói trực quan, chưa mô tả đủ cơ chế.',
-  low:'Temperature thấp ưu tiên token có xác suất cao, thường làm kết quả ổn định hơn. Điều này không bảo đảm nội dung đúng hoặc đầu ra luôn giống hệt.',
-  high:'Temperature cao làm phân bố bớt tập trung: token ít có khả năng hơn có thêm cơ hội được chọn, tạo đầu ra đa dạng hơn.',
-  usage:'Ví dụ áp dụng do nhóm biên soạn: trích xuất cần nhất quán có thể dùng thấp; nghĩ nhiều ý tưởng quảng cáo có thể dùng cao. Vẫn cần kiểm tra độ đúng.',
-  sampling:'Top-k khoanh k token có xác suất cao nhất. Top-p khoanh tập token theo xác suất cộng dồn. Temperature điều chỉnh phân bố xác suất dùng để lấy mẫu.'
-};
-async function api(path, body) {
-  const response = await fetch(path, body === undefined ? {} : {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'Không thể kết nối. Hãy thử lại.');
-  return data;
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let session=null,config={ready:false},lessons=[],selected='day1',busy=false;
+const labels={met:'Đã giải thích được',missing:'Cần bổ sung',incorrect:'Cần sửa cách hiểu',unassessed:'Chưa kiểm tra'};
+async function api(path,body){const r=await fetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d.error||'Không thể kết nối. Hãy thử lại.');return d;}
+function showError(e){$('error').textContent=e.message;$('error').hidden=false;}
+function clearError(){$('error').hidden=true;}
+function setBusy(v){busy=v;document.querySelectorAll('[data-page],[data-practice],[data-resume],[data-select],#new-session,#back-library,#mobile-back').forEach(b=>b.disabled=v);$('send').disabled=v||!config.ready||!session||session.status!=='active';$('answer').disabled=v||!session||session.status!=='active';$('thinking').hidden=!v;}
+function page(id){if(busy)return;document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==id);document.querySelectorAll('[data-page]').forEach(n=>n.classList.toggle('active',n.dataset.page===id));$('breadcrumb').textContent={library:'Bài học của tôi',learn:'Phòng dạy lại',dashboard:'Góc giảng viên',about:'Cách hoạt động'}[id];window.scrollTo(0,0);clearError();if(id==='library')refreshLessons();if(id==='dashboard')loadDashboard();}
+async function refreshLessons(){try{lessons=(await api('/api/lessons')).lessons;renderLessons();}catch(e){showError(e);}}
+function renderLessons(){
+ $('lesson-cards').innerHTML=lessons.map(l=>`<button class="lesson-card ${l.id===selected?'selected':''}" data-select="${l.id}" aria-pressed="${l.id===selected}"><span class="eyebrow">${esc(l.day)} · ${l.sections.length} PHẦN</span><h2>${esc(l.title)}</h2><p>${esc(l.description)}</p><div class="lesson-score"><strong>${l.percent}%</strong><span>${l.met}/${l.total} tiêu chí đạt</span></div><progress max="${l.total}" value="${l.met}" aria-label="Tiến độ ${esc(l.title)}"></progress><small>${l.assessed}/${l.total} tiêu chí đã kiểm tra · ${l.completed_sections}/${l.sections.length} phần đã đạt</small></button>`).join('');
+ const l=lessons.find(x=>x.id===selected);if(!l)return;
+ $('lesson-detail').innerHTML=`<div class="detail-heading"><div><div class="eyebrow">CHECKLIST ${esc(l.day)}</div><h2>${esc(l.title)}</h2></div><a class="button secondary" href="/slides/${l.id}" target="_blank" rel="noopener">↗ Mở bộ slide</a></div><div class="lesson-legend"><span>✓ Đã giải thích được: ${l.met}</span><span>◐ Cần bổ sung / sửa: ${l.assessed-l.met}</span><span>○ Chưa kiểm tra: ${l.total-l.assessed}</span></div><p class="muted">Mỗi câu hỏi là một tiêu chí. Luyện từng phần gồm 3–4 tiêu chí, tối đa 3 câu gợi mở. Số trang là trang PDF, có thể khác số slide in ở chân trang.</p>`+l.sections.map((s,i)=>`<article class="section-card"><div class="section-heading"><div><span class="eyebrow">PHẦN ${String(i+1).padStart(2,'0')}</span><h3>${esc(s.title)}</h3></div><span class="section-score">${s.met}/${s.total} đạt</span></div><ul class="question-list">${s.criteria.map(c=>`<li><span class="question-state ${c.status}" aria-label="${labels[c.status]}">${c.status==='met'?'✓':c.status==='unassessed'?'○':'◐'}</span><div><p>${esc(c.question)}</p><small>${labels[c.status]} · <a href="/slides/${l.id}#page=${c.pages[0]}" target="_blank" rel="noopener">${esc(c.source)}</a></small></div></li>`).join('')}</ul><div class="section-actions"><button class="button primary" data-practice="${s.id}">${s.assessed?'Luyện lại phần này':'Dạy lại phần này'} ↗</button>${s.session_id?`<button class="button secondary" data-resume="${s.session_id}">Xem / tiếp tục lần gần nhất</button>`:''}</div></article>`).join('');
+ document.querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>{selected=b.dataset.select;localStorage.setItem('teachback-lesson',selected);renderLessons();});document.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>start(selected,b.dataset.practice));document.querySelectorAll('[data-resume]').forEach(b=>b.onclick=()=>resume(b.dataset.resume));setBusy(busy);
 }
-function showError(error) {$('error').textContent=error.message; $('error').hidden=false;}
-function clearError() {$('error').hidden=true;}
-function setBusy(value) {
-  busy=value; $('send').disabled=value || !config.ready || !session || session.status!=='active';
-  $('new-session').disabled=value; $('answer').disabled=value || (session && session.status!=='active');
-  $('thinking').hidden=!value;
+function updateCounter(){$('counter').firstChild.textContent=`${$('answer').value.length.toLocaleString('vi-VN')} / 6.000 `;}
+function restoreDraft(){$('answer').value=localStorage.getItem('teachback-draft-'+session.id)||'';updateCounter();}
+async function start(lessonId,sectionId){if(busy)return;clearError();setBusy(true);try{session=await api('/api/sessions',{lesson_id:lessonId,section_id:sectionId});localStorage.setItem('teachback-session',session.id);restoreDraft();renderSession();setBusy(false);page('learn');}catch(e){showError(e);}finally{setBusy(false);}}
+async function resume(id){if(busy)return;clearError();setBusy(true);try{session=await api('/api/sessions/'+encodeURIComponent(id));localStorage.setItem('teachback-session',session.id);restoreDraft();renderSession();setBusy(false);page('learn');}catch(e){showError(e);}finally{setBusy(false);}}
+function renderSession(){
+ if(!session){$('messages').innerHTML='<p class="muted">Chọn một phần trong “Bài học của tôi” để bắt đầu.</p>';$('composer').hidden=true;setBusy(false);return;}
+ const criteria=session.criteria||[],total=criteria.length,count=session.checks.filter(c=>c.status==='met').length;
+ $('topic-lesson').textContent=session.lesson_title||'Phiên temperature cũ · transcript';$('topic-title').textContent=session.section_title||'Temperature & sampling';$('topic-description').textContent='Giải thích các câu trong checklist bằng lời của bạn. Mầm sẽ hỏi thêm chỗ cần làm rõ.';$('topic-count').textContent=`◎ ${total} tiêu chí trong phần này`;$('lesson-badge').textContent=session.lesson_title||'Phiên luyện tập cũ';$('answer').placeholder='Theo mình hiểu…';
+ $('messages').innerHTML=session.messages.map(m=>`<div class="message ${m.role}"><div class="message-label">${m.role==='user'?'Bạn · người dạy':'Mầm · học trò AI'}</div><div class="bubble">${esc(m.text)}</div></div>`).join('');$('messages').scrollTop=$('messages').scrollHeight;$('progress-count').textContent=`${count}/${total}`;$('progress-fill').style.width=`${total?count/total*100:0}%`;$('probes').textContent=`${session.probes} / 3`;
+ $('checklist').innerHTML=criteria.map((c,i)=>{const status=session.checks.find(x=>x.id===c.id)?.status||'unassessed';return `<div class="practice-check"><div class="check ${status}"><span class="check-icon">${status==='met'?'✓':i+1}</span><span>${esc(c.label)}</span></div><p>${esc(c.question)}</p><small>${labels[status]}</small></div>`;}).join('');
+ $('source-note').innerHTML=session.lesson_id?`▤ <a href="/slides/${session.lesson_id}#page=${criteria[0]?.pages[0]||1}" target="_blank" rel="noopener">Xem slide phần này</a>`:'▤ Transcript T04-070–T04-072';
+ const ended=session.status!=='active';$('composer').hidden=ended;$('result').hidden=!ended;
+ if(ended){$('result').innerHTML=`<div class="eyebrow">NHÌN LẠI PHẦN ${esc(session.section_title||'TEMPERATURE')}</div><h2>${session.status==='completed'?'Bạn đã dạy được Mầm!':'Một vài điều để hiểu sâu hơn.'}</h2><p class="muted">${count}/${total} tiêu chí đạt · ${session.turn} lượt giải thích · ${session.probes} câu hỏi gợi mở</p>`+criteria.map(c=>{const check=session.checks.find(x=>x.id===c.id),met=check?.status==='met',label=met?(session.initial.includes(c.id)?'Tự giải thích đúng ngay':'Bổ sung sau gợi mở'):labels[check?.status||'unassessed'];return `<div class="result-row"><strong>${esc(c.label)}</strong><span class="status-label ${met?'':'review-label'}">${label}</span><p>${check?.evidence?'Lời của bạn: “'+esc(check.evidence)+'”':'Chưa có bằng chứng giải thích đủ tiêu chí này.'}</p>${!met?`<details><summary>Xem lại ${esc(c.source)}</summary><p>${esc(c.review||'Xem lại tài liệu nguồn được dẫn cho tiêu chí này.')}</p>${session.lesson_id?`<a href="/slides/${session.lesson_id}#page=${c.pages[0]}" target="_blank" rel="noopener">Mở đúng trang PDF ↗</a>`:''}<p class="muted">Gợi ý diễn giải từ tài liệu, không phải trích nguyên văn.</p></details>`:''}</div>`;}).join('')+'<div class="section-actions"><button id="export" class="button secondary">↓ Tải log JSON</button><button id="next-part" class="button primary">Về checklist · chọn phần tiếp theo ↗</button></div>';
+ $('next-part').onclick=()=>{selected=session.lesson_id||selected;page('library');};$('export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(session,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`teachback-${session.id}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};}setBusy(false);
 }
-function render() {
-  if (!session) return;
-  $('messages').innerHTML=session.messages.map(m=>`<div class="message ${m.role}"><div class="message-label">${m.role==='user'?'Bạn · người dạy':'Mầm · học trò AI'}</div><div class="bubble">${escapeHtml(m.text)}</div></div>`).join('');
-  $('messages').scrollTop=$('messages').scrollHeight;
-  const count=session.checks.filter(c=>c.status==='met').length;
-  $('progress-count').textContent=`${count}/5`;
-  $('progress-fill').style.width=`${count*20}%`;
-  $('probes').textContent=`${session.probes} / 3`;
-  $('checklist').innerHTML=config.criteria.map((c,i)=>{const met=session.checks.some(x=>x.id===c.id&&x.status==='met');return `<div class="check ${met?'met':''}"><span class="check-icon">${met?'✓':i+1}</span><span>${escapeHtml(c.label)}</span></div>`;}).join('');
-  const ended=session.status!=='active';
-  $('composer').hidden=ended; $('result').hidden=!ended;
-  if (ended) {
-    $('result').innerHTML=`<div class="eyebrow">NHÌN LẠI PHIÊN DẠY</div><h2>${session.status==='completed'?'Bạn đã dạy được Mầm!':'Một vài điều để hiểu sâu hơn.'}</h2><p class="muted">${count}/5 điểm đã giải thích được · ${session.turn} lượt giải thích · ${session.probes} câu hỏi gợi mở</p>`+config.criteria.map(c=>{
-      const check=session.checks.find(x=>x.id===c.id), met=check?.status==='met';
-      const label=met?(session.initial.includes(c.id)?'Tự giải thích đúng ngay':'Bổ sung sau gợi mở'):(check?.status==='incorrect'?'Cần sửa cách hiểu':'Chưa giải thích đủ');
-      return `<div class="result-row"><strong>${escapeHtml(c.label)}</strong><span class="status-label ${met?'':'review-label'}">${label}</span><p>${check?.evidence?'Lời của bạn: “'+escapeHtml(check.evidence)+'”':'Chưa có bằng chứng giải thích đủ tiêu chí này.'}</p>${!met?`<details><summary>Xem lại ${escapeHtml(c.source)}</summary><p>${escapeHtml(notes[c.id])}</p><small>Tóm lược/diễn giải của nhóm từ transcript-04-clean.md, không phải trích nguyên văn.</small></details>`:''}</div>`;
-    }).join('')+'<button id="export" class="button secondary">↓ Tải log phiên học (JSON)</button>';
-    $('export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(session,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`teachback-${session.id}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
-  }
-  setBusy(false);
-}
-async function start() {
-  clearError(); setBusy(true);
-  try {session=await api('/api/sessions',{}); localStorage.setItem('teachback-session',session.id); $('answer').value=''; updateCounter(); render();}catch(e){showError(e);}finally{setBusy(false);}
-}
-function updateCounter() {$('counter').firstChild.textContent=`${$('answer').value.length.toLocaleString('vi-VN')} / 6.000 `;}
-$('new-session').onclick=start;
-$('answer').addEventListener('input',updateCounter);
-$('answer').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();$('composer').requestSubmit();}});
-$('composer').onsubmit=async e=>{
-  e.preventDefault(); if(busy||!session||!config.ready||!$('answer').value.trim())return;
-  clearError();setBusy(true);
-  try {session=await api(`/api/sessions/${session.id}/turns`,{text:$('answer').value,expected_turn:session.turn});$('answer').value='';updateCounter();render();if(session.status!=='active')$('result').scrollIntoView({behavior:'smooth',block:'start'});}
-  catch(error){showError(error);}finally{setBusy(false);if(session.status==='active')$('answer').focus();}
-};
-async function loadDashboard() {
-  try {const d=await api('/api/dashboard');$('dashboard-content').innerHTML=`<div class="stats"><div class="stat"><strong>${d.total}</strong><span>Phiên đã bắt đầu</span></div><div class="stat"><strong>${d.finished}</strong><span>Phiên đã kết thúc</span></div><div class="stat"><strong>${d.completed}</strong><span>Đã dạy được · đủ 5 điểm</span></div></div><div class="about-card"><h2>Chỗ nào cần được gợi mở nhiều hơn?</h2>${d.finished?'<p class="muted">“Sau gợi mở” gồm mọi điểm được bổ sung sau lượt đầu, kể cả điểm không được hỏi trực tiếp.</p>':'<p class="muted">Chưa có phiên kết thúc. Hoàn thành một phiên dạy lại để xem dữ liệu ở đây.</p>'}<div class="table-wrap"><table><thead><tr><th>Tiêu chí</th><th>Hiểu ngay</th><th>Sau gợi mở</th><th>Còn hổng</th></tr></thead><tbody>${d.criteria.map(c=>`<tr><td>${escapeHtml(c.label)}</td><td>${c.initial}</td><td>${c.prompted}</td><td>${c.gap}</td></tr>`).join('')}</tbody></table></div></div>`;}catch(e){showError(e);}
-}
-document.querySelectorAll('[data-page]').forEach(button=>button.onclick=()=>{document.querySelectorAll('.page').forEach(p=>p.hidden=p.id!==button.dataset.page);document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n===button));$('breadcrumb').textContent=button.querySelector('span').textContent;clearError();if(button.dataset.page==='dashboard')loadDashboard();});
-$('refresh').onclick=loadDashboard;
-(async()=>{try{config=await api('/api/config');$('setup').hidden=config.ready;const id=localStorage.getItem('teachback-session');if(id){try{session=await api(`/api/sessions/${encodeURIComponent(id)}`);}catch{localStorage.removeItem('teachback-session');}}if(session)render();else await start();}catch(e){showError(e);setBusy(false);}})();
+$('new-session').onclick=()=>session?.lesson_id?start(session.lesson_id,session.section_id):page('library');$('back-library').onclick=$('mobile-back').onclick=()=>{selected=session?.lesson_id||selected;page('library');};
+$('answer').addEventListener('input',()=>{updateCounter();if(session)localStorage.setItem('teachback-draft-'+session.id,$('answer').value);});$('answer').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();$('composer').requestSubmit();}});
+$('composer').onsubmit=async e=>{e.preventDefault();if(busy||!session||!config.ready||!$('answer').value.trim())return;clearError();setBusy(true);try{session=await api(`/api/sessions/${session.id}/turns`,{text:$('answer').value,expected_turn:session.turn});localStorage.removeItem('teachback-draft-'+session.id);$('answer').value='';updateCounter();renderSession();await refreshLessons();if(session.status!=='active')$('result').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){showError(e);}finally{setBusy(false);if(session.status==='active')$('answer').focus();}};
+async function loadDashboard(){try{const id=$('dashboard-lesson').value,d=await api('/api/dashboard'+(id?'?lesson_id='+encodeURIComponent(id):''));$('dashboard-content').innerHTML=`<div class="stats"><div class="stat"><strong>${d.total}</strong><span>Lượt luyện đã bắt đầu</span></div><div class="stat"><strong>${d.finished}</strong><span>Lượt đã kết thúc</span></div><div class="stat"><strong>${d.completed}</strong><span>Lượt đạt toàn bộ tiêu chí phần</span></div></div><div class="about-card"><h2>Chỗ nào cần được gợi mở nhiều hơn?</h2><p class="muted">Đếm theo lượt luyện đã kết thúc của bài đã chọn. Khác tiến độ cá nhân dùng lần đánh giá mới nhất mỗi phần; các lần luyện lại vẫn được đếm ở đây.</p><div class="table-wrap"><table><thead><tr><th>Tiêu chí</th><th>Hiểu ngay</th><th>Sau gợi mở</th><th>Còn hổng</th></tr></thead><tbody>${d.criteria.map(c=>`<tr><td>${esc(c.label)}</td><td>${c.initial}</td><td>${c.prompted}</td><td>${c.gap}</td></tr>`).join('')}</tbody></table></div></div>`;}catch(e){showError(e);}}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>page(b.dataset.page));$('refresh').onclick=loadDashboard;$('dashboard-lesson').onchange=loadDashboard;
+(async()=>{try{config=await api('/api/config');$('setup').hidden=config.ready;selected=localStorage.getItem('teachback-lesson')||'day1';await refreshLessons();if(!lessons.some(l=>l.id===selected)){selected='day1';renderLessons();}$('dashboard-lesson').innerHTML=lessons.map(l=>`<option value="${l.id}">${esc(l.day)} · ${esc(l.title)}</option>`).join('')+'<option value="">Phiên temperature cũ</option>';const id=localStorage.getItem('teachback-session');if(id){try{session=await api('/api/sessions/'+encodeURIComponent(id));restoreDraft();}catch{localStorage.removeItem('teachback-session');}}renderSession();}catch(e){showError(e);setBusy(false);}})();
