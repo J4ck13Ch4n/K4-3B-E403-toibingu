@@ -34,7 +34,10 @@ Mở **http://127.0.0.1:8000**. Có thể đổi `PORT` và `OPENAI_MODEL` trong
 - Phòng dạy lại, giao diện responsive, lưu và khôi phục phiên khi tải lại trang.
 - Gọi OpenAI Responses API thật, Structured Outputs cho 3–4 tiêu chí của phần đang học; kiểm tra ID, trạng thái và bằng chứng nguyên văn phía server. Phiên cũ vẫn giữ 5 tiêu chí.
 - Đánh giá toàn hội thoại tích lũy, cho phép sửa sai và thu hồi tiêu chí khi phát biểu mới mâu thuẫn.
-- Một câu hỏi cố định cho mỗi tiêu chí. Khi tiêu chí mới đạt, Mầm xác nhận đã hiểu phần đó trước khi hỏi tiếp. Nếu câu đang hỏi còn thiếu/sai, tiếp tục làm rõ câu đó; sau khi đạt mới chuyển sang điểm còn hổng (ưu tiên lỗi hiểu sai). Không sinh lời giải trong vai học trò.
+- Mỗi câu có các ý bắt buộc trong `assessment.py`. AI phải đánh giá từng ý với bằng chứng nguyên văn và số lượt user; server chỉ cho đạt khi **mọi ý đạt và không còn mâu thuẫn**. Nêu vài từ khóa hoặc trả lời một phần không đủ. Không lấy câu hỏi của Mầm làm bằng chứng.
+- Những câu được đề xuất đạt còn qua một lượt kiểm chứng bằng chứng độc lập trước khi ghi nhận. Bước này có thể tăng thời gian/chi phí API khi câu trả lời đầy đủ; log lưu cả `response_id` và `audit_response_id` để rà soát.
+- Khi câu chưa đạt, AI chẩn đoán một khía cạnh thiếu/sai và tạo một câu gợi mở theo lời học viên (tình huống, hệ quả, phản ví dụ), không đưa sẵn đáp án. Nếu lặp câu cũ hoặc định dạng không hợp lệ, server dùng câu hỏi dự phòng theo ý còn hổng và đổi góc nhìn theo lượt.
+- Khi toàn bộ ý của câu đã đạt, Mầm mới xác nhận đã hiểu rồi hỏi tiếp. Nếu câu hiện tại chưa đạt, tiếp tục làm rõ câu đó, trong giới hạn 3 lượt gợi mở mỗi phiên.
 - Tối đa **3 câu hỏi gợi mở**, tức **1 lời giải thích đầu + 3 lời bổ sung**. Lượt thứ tư được đánh giá trước khi quyết định thành công hoặc xem lại.
 - Log gồm bằng chứng, từng lượt đánh giá, tiêu chí được hỏi và response ID để kiểm tra lời gọi thật. Tải JSON ở cuối phiên.
 - Kết quả tách “Tự giải thích đúng ngay”, “Bổ sung sau gợi mở” và “Cần xem lại”. Nhãn sau gợi mở tính mọi điểm bổ sung sau lượt đầu, không khẳng định quan hệ nhân quả với câu hỏi.
@@ -56,11 +59,14 @@ python -m unittest discover -s tests -v
 node --check static/app.js
 python smoke_ai.py
 python tools/smoke_lessons.py
+python tools/smoke_feedback.py
 ```
 
 Unit test kiểm tra phân nhánh, giới hạn gợi mở, sửa sai, log, lỗi API, bằng chứng bịa, trạng thái trả về, endpoint HTTP, gửi lặp và chặn file riêng tư. Các test dùng mock, **không chứng minh chất lượng chấm của AI**. `smoke_ai.py` gọi AI thật một lần, dùng key trong `.env`, có phát sinh chi phí API.
 
 `tools/smoke_lessons.py` kiểm tra AI thật với 3 câu trả lời tự soạn: Day 1 cơ chế sinh token, Day 2 metrics, và prompt injection; không ghi vào tiến độ người dùng. `python tools/export_checklist.py` tái tạo checklist Markdown từ ngân hàng câu hỏi.
+
+`tools/smoke_feedback.py` kiểm tra trả lời thiếu, quan hệ AI/ML sai, lặp hiểu sai, sửa sai rõ ràng và chỉ trả lời một mốc lịch sử. Báo cáo câu hỏi thực tế lưu ở `runtime/feedback-smoke.json`; không ghi vào tiến độ. Các phiên tiếp tục được đánh giá lại theo bộ chấm mới từ lượt trả lời kế tiếp. Log mới có `grading_version: 2`, bằng chứng/chẩn đoán từng ý; không tự sửa kết quả lịch sử đã kết thúc. Vẫn cần bộ eval rộng hơn và người rà soát chất lượng chấm/câu hỏi AI.
 
 Kiểm thử trình duyệt tùy chọn (Edge đã cài): `python -m pip install --target runtime/browser playwright`, sau đó `python tools/browser_check.py`. Dùng evaluator giả và SQLite tạm riêng; kiểm tra chọn bài, phiên 4 tiêu chí, giới hạn hỏi ngược, luyện lại, tải lại trang, dashboard và bố cục mobile. Không thay đổi database người dùng.
 

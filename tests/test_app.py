@@ -98,15 +98,18 @@ class FlowTests(unittest.TestCase):
     def test_responses_request_and_parsing(self):
         messages = [{'role': 'user', 'text': 'Giải thích.'}]
         checks, _ = evaluator(['met'] * 5)(messages)
-        response = {'status': 'completed', 'id': 'resp_test', 'output': [{'content': [{'type': 'output_text', 'text': json.dumps({'checks': checks})}]}]}
+        from test_assessment import raw_check
+        raw=[raw_check(c) for c in app.CRITERIA]
+        response = {'status': 'completed', 'id': 'resp_test', 'output': [{'content': [{'type': 'output_text', 'text': json.dumps({'checks': raw})}]}]}
         import io
-        with patch.dict(app.os.environ, {'OPENAI_API_KEY': 'test-only'}), patch.object(app, 'urlopen', return_value=io.BytesIO(json.dumps(response).encode())) as mock:
+        with patch.dict(app.os.environ, {'OPENAI_API_KEY': 'test-only'}), patch.object(app, 'urlopen', side_effect=lambda *a,**kw: io.BytesIO(json.dumps(response).encode())) as mock:
             actual, rid = app.evaluate(messages)
         request = mock.call_args.args[0]
         payload = json.loads(request.data)
         self.assertFalse(payload['store'])
         self.assertTrue(payload['text']['format']['strict'])
-        self.assertEqual(actual, checks)
+        self.assertEqual([{k:c[k] for k in ('id','status','evidence')} for c in actual], checks)
+        self.assertTrue(all(c['points'] for c in actual))
         self.assertEqual(rid, 'resp_test')
 
 

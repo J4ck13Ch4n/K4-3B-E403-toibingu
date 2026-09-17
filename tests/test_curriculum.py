@@ -111,7 +111,7 @@ class CurriculumTests(unittest.TestCase):
         app.advance(s,'Sai.',judge)
         reply=s['messages'][-1]['text']
         self.assertNotIn('đã hiểu',reply)
-        self.assertIn(s['rubric'][0]['question'],reply)
+        self.assertNotIn(s['rubric'][0]['question'],reply)
         self.assertEqual(s['target'],s['rubric'][0]['id'])
 
 
