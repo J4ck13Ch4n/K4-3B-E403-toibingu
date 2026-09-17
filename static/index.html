@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TeachBack · Hiểu sâu bằng cách dạy lại</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/"><span class="brand-icon">t↗</span> teachback<span class="brand-dot">.</span></a>
+  <div class="workspace-label">KHÔNG GIAN HỌC TẬP</div>
+  <nav aria-label="Điều hướng"><button class="nav active" data-page="learn">◈ <span>Phòng dạy lại</span><span class="nav-arrow">↗</span></button><button class="nav" data-page="dashboard">▥ <span>Góc giảng viên</span></button><button class="nav" data-page="about">☷ <span>Cách hoạt động</span></button></nav>
+  <div class="sidebar-note"><span class="tiny-star">✳</span><p>Hiểu một điều.<br>Dạy lại theo cách của bạn.</p><small>Mỗi câu hỏi là một cơ hội<br>để hiểu sâu hơn một chút.</small></div>
+  <div class="profile"><span class="avatar">HV</span><div>Học viên Foundation<small>AI in Action · Khóa 04</small></div></div>
+</aside>
+<div class="shell">
+  <header><span>Không gian học tập <span class="slash">/</span> <strong id="breadcrumb">Phòng dạy lại</strong></span><span class="badge"><i></i> Foundation Day 1</span></header>
+  <main>
+    <div id="error" class="alert" role="alert" hidden></div>
+    <section id="learn" class="page">
+      <div class="heading"><div><div class="eyebrow">HỌC BẰNG CÁCH DẠY LẠI</div><h1>Thử làm thầy, hiểu sâu hơn<span>.</span></h1><p>Hôm nay, bạn là người giải thích. Mình là người muốn hiểu.</p></div><button id="new-session" class="button secondary">↻ &nbsp; Phiên mới</button></div>
+      <div class="topic"><div class="topic-icon">✳</div><div><div class="eyebrow">KHÁI NIỆM HÔM NAY</div><h2>Temperature & sampling</h2><p>Từ “nhớ đáp án” đến hiểu cách mô hình chọn từ tiếp theo.</p></div><div class="topic-meta"><span>◷ &nbsp; Khoảng 5–10 phút</span><span>◎ &nbsp; 5 điểm cốt lõi</span></div></div>
+      <div id="setup" class="setup" hidden><strong>Cần kết nối AI để bắt đầu đánh giá</strong><p>Điền <code>OPENAI_API_KEY</code> trong file <code>.env</code>, sau đó khởi động lại bằng <code>python app.py</code>. Bạn vẫn có thể xem giao diện trước.</p></div>
+      <div class="learning-grid">
+        <section class="chat-card"><div class="chat-header"><span class="bot-avatar">✳</span><div><strong>Mầm <span class="mini-badge">HỌC TRÒ AI</span></strong><small>Mình sẵn sàng nghe bạn dạy rồi!</small></div><span class="online-dot"></span></div>
+          <div class="session-caption">MỘT CUỘC TRÒ CHUYỆN ĐỂ HIỂU HƠN</div>
+          <div id="messages" class="messages" role="log" aria-live="polite"></div>
+          <div id="thinking" class="thinking" role="status" hidden>Mầm đang đọc và đối chiếu lời giải thích của bạn…</div>
+          <form id="composer"><label for="answer" class="sr-only">Lời giải thích của bạn</label><textarea id="answer" maxlength="6000" placeholder="Theo mình hiểu, temperature là…" rows="3" required></textarea><div class="composer-bottom"><span id="counter">0 / 6.000 <span class="keyboard-hint">· Ctrl + Enter để gửi</span></span><button id="send" class="button primary" type="submit">Gửi lời giải thích &nbsp; ↗</button></div></form>
+          <div class="practice-note">♧ &nbsp; Đây là luyện tập, không phải chấm điểm. Cứ dùng lời của bạn nhé.</div>
+        </section>
+        <aside class="right-column"><section class="progress-card"><div class="card-heading"><h3>Hành trình hiểu sâu</h3><span id="progress-count">0/5</span></div><div class="progress-track"><div id="progress-fill"></div></div><p class="muted">Những điều bạn đã giúp Mầm hiểu</p><div id="checklist"></div><div class="probe-count"><span>Câu hỏi gợi mở</span><strong id="probes">0 / 3</strong></div><p class="muted small">Mầm chỉ hỏi một điều mỗi lần. Sau tối đa 3 câu hỏi, mình cùng nhìn lại.</p></section>
+          <section class="tip-card"><span>“</span><h3>Không cần nói thật hay.<br>Chỉ cần nói thật hiểu.</h3><p>Thử dùng một ví dụ của riêng bạn, rồi giải thích vì sao nó hoạt động như vậy.</p><div>THE FEYNMAN TECHNIQUE</div></section>
+          <div class="source-note">▤ &nbsp; Bám sát tài liệu buổi học<br><span>Transcript T04-070 → T04-072</span></div>
+        </aside>
+      </div>
+      <section id="result" class="result-card" hidden></section>
+      <p class="privacy-note">Lời giải thích được gửi tới OpenAI để đánh giá và lưu trên máy này. Không nhập thông tin cá nhân. Chỉ sử dụng trong phạm vi hackathon.</p>
+    </section>
+    <section id="dashboard" class="page" hidden><div class="eyebrow">GÓC GIẢNG VIÊN</div><h1>Nhìn thấy khoảng trống hiểu biết<span>.</span></h1><p class="muted">Tổng hợp các phiên trên máy này. Chỉ phiên đã kết thúc được dùng để thống kê tiêu chí.</p><button id="refresh" class="button secondary">↻ Cập nhật</button><div id="dashboard-content"></div></section>
+    <section id="about" class="page" hidden><div class="eyebrow">PHƯƠNG PHÁP</div><h1>Dạy lại để biết mình đã hiểu<span>.</span></h1><div class="about-card"><h2>01 · Giải thích bằng lời của bạn</h2><p>Mầm đóng vai học trò chưa hiểu temperature & sampling. Bạn có thể bắt đầu từ cách mô hình chọn từ tiếp theo và một ví dụ thực tế.</p><h2>02 · Bổ sung chỗ còn hổng</h2><p>AI đối chiếu lời giải thích tích lũy với 5 tiêu chí do nhóm soạn từ T04-070–T04-072. Mầm hỏi ngược đúng một câu mỗi lần, tối đa 3 lần, không đưa lời giải.</p><h2>03 · Nhìn lại hành trình</h2><p>Kết quả phân biệt điểm giải thích đúng ngay, điểm bổ sung sau gợi mở và điểm cần xem lại. Đây là phản hồi luyện tập, không phải xác nhận năng lực chính thức.</p><h2>Dữ liệu và phạm vi</h2><p>MVP chạy cục bộ cho một người dùng; góc giảng viên là bản xem tổng hợp trên cùng máy, chưa phân quyền. Chỉ gửi rubric ngắn và hội thoại hiện tại đến AI; không tải nguyên bộ dữ liệu học viên. Phiên lưu trong runtime/sessions.sqlite3.</p></div></section>
+  </main><footer><span>teachback. <span class="footer-divider">/</span> Một chút giải thích, một bước hiểu sâu.</span><span>MVP · AI in Action Lab</span></footer>
+</div>
+</body></html>
