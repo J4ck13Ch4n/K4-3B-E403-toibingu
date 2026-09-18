@@ -2,6 +2,65 @@
 import re
 from difflib import SequenceMatcher
 
+# Reviewed questions for the temperature slice. Never display a model-written
+# probe for these criteria: lexical overlap cannot reliably detect answer leaks.
+# Each list has three different scenarios, matching the session's probe limit.
+TEMPERATURE_PROBES = {
+ 'definition': {
+  'p1': [
+   'Nếu giữ nguyên đề bài nhưng đổi temperature, cậu dự đoán quá trình tạo câu trả lời sẽ thay đổi ở bước nào?',
+   'Với câu mở đầu “Hôm nay trời…”, cậu mô tả vai trò của temperature trong bước viết tiếp được không?',
+   'Cậu sẽ thiết kế một thử nghiệm nhỏ như thế nào để giải thích temperature cho người chưa học?']},
+ 'low': {
+  'p1': [
+   'Khi giảm temperature và đang có nhiều cách viết tiếp một câu, cậu dự đoán mô hình sẽ lựa chọn như thế nào?',
+   'Với câu mở đầu “Món ăn tôi thích là…”, cậu giải thích cách chọn từ khi temperature thấp được không?',
+   'Cậu sẽ quan sát điều gì ở bước chọn từ để kiểm tra tác động của việc giảm temperature?'],
+  'p2': [
+   'Nếu gửi cùng một đề bài nhiều lần ở temperature thấp, cậu dự đoán kết quả sẽ như thế nào?',
+   'Cậu sẽ so sánh những gì giữa các câu trả lời để kiểm chứng dự đoán của mình về temperature thấp?',
+   'Khi dùng temperature thấp cho một bài toán mới, cậu sẽ kiểm tra chất lượng kết quả ra sao?']},
+ 'high': {
+  'p1': [
+   'Nếu tăng temperature trong lúc mô hình đang viết tiếp một câu, cậu dự đoán bước chọn từ sẽ thay đổi thế nào?',
+   'Với câu mở đầu “Một ý tưởng cho chuyến đi là…”, cậu mô tả cách chọn từ khi temperature cao được không?',
+   'Cậu sẽ quan sát điều gì ở bước chọn từ để kiểm tra tác động của việc tăng temperature?'],
+  'p2': [
+   'Nếu chạy cùng một đề bài nhiều lần ở temperature cao, cậu dự đoán các câu trả lời sẽ như thế nào?',
+   'Cậu sẽ so sánh những gì giữa các lần chạy để kiểm chứng dự đoán về temperature cao?',
+   'Khi dùng temperature cao cho một bài toán mới, cậu sẽ kiểm tra chất lượng kết quả ra sao?']},
+ 'usage': {
+  'p1': [
+   'Khi cần trích xuất thông tin từ nhiều hóa đơn, cậu sẽ chọn temperature thế nào và vì sao?',
+   'Nếu phải phân loại hàng loạt yêu cầu theo một mẫu cố định, cậu sẽ thử cấu hình temperature nào?',
+   'Cậu chọn một công việc cần kết quả theo cùng một quy cách và giải thích cách chọn temperature được không?'],
+  'p2': [
+   'Khi cần nghĩ ý tưởng cho một chiến dịch mới, cậu sẽ chọn temperature thế nào và vì sao?',
+   'Nếu cần nhiều hướng mở đầu cho một truyện ngắn, cậu sẽ thử cấu hình temperature nào?',
+   'Cậu chọn một công việc cần tìm nhiều phương án và giải thích cách chọn temperature được không?']},
+ 'sampling': {
+  'p1': [
+   'Nếu cài top-k bằng 3, cậu mô tả điều gì xảy ra trước bước chọn token được không?',
+   'Khi đổi top-k từ 3 thành 5, cậu dự đoán điều gì thay đổi trong bước chuẩn bị chọn từ?',
+   'Cậu sẽ dựng một ví dụ nhỏ như thế nào để phân biệt vai trò top-k với temperature?'],
+  'p2': [
+   'Nếu cài top-p bằng 0,9, cậu mô tả cách tham số này được sử dụng khi sinh văn bản được không?',
+   'Khi đổi top-p từ 0,9 thành 0,5, cậu dự đoán điều gì thay đổi trước bước chọn từ?',
+   'Cậu sẽ dựng một ví dụ nhỏ như thế nào để phân biệt vai trò top-p với temperature?'],
+  'p3': [
+   'Nếu giữ nguyên top-k và top-p nhưng thay temperature, cậu dự đoán điều gì sẽ thay đổi?',
+   'Cậu sẽ bố trí thử nghiệm thế nào để phân biệt tác động của temperature với hai tham số còn lại?',
+   'Khi giải thích ba tham số cho một người mới, cậu sẽ dùng ví dụ nào để làm rõ vai trò riêng của temperature?']},
+}
+# The lesson-library version covers the same concepts under different IDs.
+TEMPERATURE_PROBES['sampling_slide_1'] = {
+    'p1': TEMPERATURE_PROBES['low']['p1'], 'p2': TEMPERATURE_PROBES['high']['p1']}
+TEMPERATURE_PROBES['sampling_slide_2'] = {
+    'p1': TEMPERATURE_PROBES['sampling']['p2'], 'p2': TEMPERATURE_PROBES['sampling']['p3']}
+TEMPERATURE_PROBES['sampling_slide_3'] = {
+    'p1': TEMPERATURE_PROBES['usage']['p1'], 'p2': TEMPERATURE_PROBES['usage']['p2'],
+    'p3': TEMPERATURE_PROBES['sampling']['p3']}
+
 # Each row is an independently required idea, not an optional example.
 # Keep requirements within the scope of the actual learner-facing question.
 POINTS = {
@@ -161,9 +220,19 @@ def normalize(raw, messages, criteria):
 
 
 def followup(check, criterion, messages, attempt):
-    question=check.get('probe','').strip()
     prior=[m['text'].split('\n\n')[-1] for m in messages if m['role']=='assistant']+[criterion['question']]
     def clean(s):return re.sub(r'\W+',' ',s.casefold()).strip()
+    reviewed = TEMPERATURE_PROBES.get(criterion['id'])
+    if reviewed:
+        focus = check.get('focus_point')
+        if focus not in reviewed:
+            focus = next((p['point_id'] for p in check.get('points', [])
+                          if p['status'] != 'met' and p['point_id'] in reviewed), next(iter(reviewed)))
+        variants = reviewed[focus]
+        # Rotate by the actual conversation, not just the attempt number: this
+        # still works when earlier probes targeted a different point.
+        return next((q for q in variants if not any(clean(q) in clean(p) for p in prior)), variants[-1])
+    question=check.get('probe','').strip()
     repeated=any(clean(question) in clean(p) or SequenceMatcher(None,clean(question),clean(p)).ratio()>.88 for p in prior) if question else True
     point=next((p for p in requirements(criterion) if p['id']==check.get('focus_point')),None)
     expected_words=set(clean(point['expected']).split()) if point else set()

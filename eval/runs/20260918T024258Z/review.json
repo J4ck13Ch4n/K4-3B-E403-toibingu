@@ -1,0 +1,25 @@
+{
+  "run_id": "20260918T024258Z",
+  "review_date": "2026-09-18",
+  "reviewer": "Codex",
+  "independent_human_review": false,
+  "scope": "selected_regression",
+  "selected_cases": ["G11", "G13", "G16", "G17", "G18", "G19", "G20"],
+  "automated_pass": 6,
+  "final_pass": 6,
+  "total_selected": 7,
+  "live_ai_pass": 3,
+  "live_ai_total": 4,
+  "injected_failure_pass": 3,
+  "injected_failure_total": 3,
+  "full_golden_quality_bar": "not_evaluated_after_change",
+  "cases": [
+    {"id": "G11", "final": "pass"},
+    {"id": "G13", "final": "fail", "reason": "Unresolved contradiction assigned to sampling instead of low; low incorrectly acknowledged; session remains active"},
+    {"id": "G16", "final": "pass"},
+    {"id": "G17", "final": "pass", "reason": "Three distinct questions without the mechanism being disclosed; four answers end in review; extra answer rejected"},
+    {"id": "G18", "final": "pass"},
+    {"id": "G19", "final": "pass"},
+    {"id": "G20", "final": "pass"}
+  ]
+}

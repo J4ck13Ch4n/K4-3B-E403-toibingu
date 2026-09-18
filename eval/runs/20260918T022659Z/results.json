@@ -1,0 +1,1005 @@
+{
+  "run_id": "20260918T022659Z",
+  "started_at_utc": "2026-09-18T02:26:59.095474+00:00",
+  "operator": "Codex",
+  "semantic_reviewer": "pending",
+  "model": "gpt-4.1-mini",
+  "git_head": "eca584c0c0d05a27726201dfb5ab3cee9c6f6b99",
+  "sha256": {
+    "app.py": "4ceb87efc619babd3d513dc4b126aec6f51d1a2258afa6c45edeb114da2564bd",
+    "assessment.py": "cd665ea634b8c484d90282ffa254ecf47ef25b42d168a566375b066dbfc27069",
+    "curriculum.py": "21f7f5cb80c92b3901335ba6e070d72caf81b024802ff9a5d68a449cb0455ed2",
+    "tools/run_golden_set.py": "db8d2c38cb10ad1532660bb25ebd5cb5676deb9e388744b1b814a17cb8fcef7f"
+  },
+  "golden_set_sha256_before_run": "926c8a6ec452f4a063436ceca76fb2f7e22cb3c821c4a079a1c12694bd7daee5",
+  "expected_status_order": [
+    "definition",
+    "low",
+    "high",
+    "usage",
+    "sampling"
+  ],
+  "expected": {
+    "G01": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G02": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G03": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G04": [
+      "missing",
+      "incorrect",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G05": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G06": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "met"
+    ],
+    "G07": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G08": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G09": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G10": [
+      "missing",
+      "missing",
+      "missing",
+      "met",
+      "missing"
+    ],
+    "G11": [
+      "met",
+      "met",
+      "met",
+      "met",
+      "met"
+    ],
+    "G12": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G13": [
+      "met",
+      "incorrect",
+      "met",
+      "met",
+      "met"
+    ],
+    "G14": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G15": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G16": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G17": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ]
+  },
+  "cases": [
+    {
+      "id": "G01",
+      "mode": "live_ai",
+      "started_at_utc": "2026-09-18T02:26:59.203849+00:00",
+      "steps": [
+        {
+          "id": "732a8fb1-74b9-469e-9a93-43ca0271addd",
+          "created_at": "2026-09-18T02:26:59.169598+00:00",
+          "status": "active",
+          "turn": 1,
+          "probes": 1,
+          "messages": [
+            {
+              "role": "assistant",
+              "text": "Mình nghe về temperature nhưng chưa hiểu lắm. Cậu giải thích cho mình bằng lời của cậu được không?"
+            },
+            {
+              "role": "user",
+              "text": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+            },
+            {
+              "role": "assistant",
+              "text": "À, mình đã hiểu phần “Bản chất temperature” qua lời giải thích của cậu rồi.\n\nMình hỏi tiếp nhé: Nếu giảm temperature, cách chọn từ và kết quả giữa những lần chạy sẽ thay đổi ra sao, vì sao vậy?"
+            }
+          ],
+          "checks": [
+            {
+              "id": "definition",
+              "status": "met",
+              "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k.",
+              "points": [
+                {
+                  "status": "met",
+                  "user_turn": 1,
+                  "diagnosis": "Học viên đã giải thích rõ temperature điều chỉnh phân bố xác suất khi chọn token tiếp theo.",
+                  "point_id": "p1",
+                  "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "",
+              "probe": "",
+              "audit_response_id": "resp_01325133e38e75d1016aaca17dbb7087d1a3054f52d890e6cc"
+            },
+            {
+              "id": "low",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Không có thông tin về ưu tiên token xác suất cao khi temperature thấp.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Không có thông tin về kết quả ít ngẫu nhiên và ổn định hơn khi temperature thấp.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Hãy cho biết khi giảm temperature, mô hình chọn từ ưu tiên những token nào và tại sao?"
+            },
+            {
+              "id": "high",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Không có thông tin về tăng cơ hội chọn token ít xác suất khi temperature cao.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Không có thông tin về kết quả đa dạng và ngẫu nhiên hơn khi temperature cao.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Khi tăng temperature, các token ít xác suất có cơ hội như thế nào trong việc được chọn?"
+            },
+            {
+              "id": "usage",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nêu ví dụ về tình huống cần dùng temperature thấp và lý do.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nêu ví dụ về tình huống cần dùng temperature cao và lý do.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Cho biết ví dụ tình huống nên dùng temperature thấp và lý do tại sao?"
+            },
+            {
+              "id": "sampling",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa giải thích top-k giữ token xác suất cao nhất theo số lượng k nhất định.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "met",
+                  "user_turn": 1,
+                  "diagnosis": "Người học đúng khi nói top-p giữ token xác suất cao theo ngưỡng cộng dồn.",
+                  "point_id": "p2",
+                  "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa giải thích temperature điều chỉnh phân bố lấy mẫu, không phải giới hạn số lượng token.",
+                  "point_id": "p3",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Bạn có thể giải thích rõ hơn top-k giữ bao nhiêu token như thế nào không?"
+            }
+          ],
+          "initial": [
+            "definition"
+          ],
+          "history": [
+            {
+              "turn": 1,
+              "prompted_for": null,
+              "checks": [
+                {
+                  "id": "definition",
+                  "status": "met",
+                  "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k.",
+                  "points": [
+                    {
+                      "status": "met",
+                      "user_turn": 1,
+                      "diagnosis": "Học viên đã giải thích rõ temperature điều chỉnh phân bố xác suất khi chọn token tiếp theo.",
+                      "point_id": "p1",
+                      "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "",
+                  "probe": "",
+                  "audit_response_id": "resp_01325133e38e75d1016aaca17dbb7087d1a3054f52d890e6cc"
+                },
+                {
+                  "id": "low",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Không có thông tin về ưu tiên token xác suất cao khi temperature thấp.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Không có thông tin về kết quả ít ngẫu nhiên và ổn định hơn khi temperature thấp.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Hãy cho biết khi giảm temperature, mô hình chọn từ ưu tiên những token nào và tại sao?"
+                },
+                {
+                  "id": "high",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Không có thông tin về tăng cơ hội chọn token ít xác suất khi temperature cao.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Không có thông tin về kết quả đa dạng và ngẫu nhiên hơn khi temperature cao.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Khi tăng temperature, các token ít xác suất có cơ hội như thế nào trong việc được chọn?"
+                },
+                {
+                  "id": "usage",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nêu ví dụ về tình huống cần dùng temperature thấp và lý do.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nêu ví dụ về tình huống cần dùng temperature cao và lý do.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Cho biết ví dụ tình huống nên dùng temperature thấp và lý do tại sao?"
+                },
+                {
+                  "id": "sampling",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa giải thích top-k giữ token xác suất cao nhất theo số lượng k nhất định.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "met",
+                      "user_turn": 1,
+                      "diagnosis": "Người học đúng khi nói top-p giữ token xác suất cao theo ngưỡng cộng dồn.",
+                      "point_id": "p2",
+                      "evidence": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa giải thích temperature điều chỉnh phân bố lấy mẫu, không phải giới hạn số lượng token.",
+                      "point_id": "p3",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Bạn có thể giải thích rõ hơn top-k giữ bao nhiêu token như thế nào không?"
+                }
+              ],
+              "response_id": "resp_0ecc614640bb2f8a016aaca174e35887d1ade2cb56b905e0b8"
+            }
+          ],
+          "target": "low",
+          "grading_version": 2,
+          "updated_at": "2026-09-18T02:27:11.206176+00:00"
+        }
+      ],
+      "last_public_session": {
+        "id": "732a8fb1-74b9-469e-9a93-43ca0271addd",
+        "created_at": "2026-09-18T02:26:59.169598+00:00",
+        "status": "active",
+        "turn": 1,
+        "probes": 1,
+        "messages": [
+          {
+            "role": "assistant",
+            "text": "Mình nghe về temperature nhưng chưa hiểu lắm. Cậu giải thích cho mình bằng lời của cậu được không?"
+          },
+          {
+            "role": "user",
+            "text": "Temperature điều chỉnh phân bố xác suất khi chọn token. Top-p giữ các token xác suất cao theo ngưỡng cộng dồn. Mình chưa rõ top-k."
+          },
+          {
+            "role": "assistant",
+            "text": "À, mình đã hiểu phần “Bản chất temperature” qua lời giải thích của cậu rồi.\n\nMình hỏi tiếp nhé: Nếu giảm temperature, cách chọn từ và kết quả giữa những lần chạy sẽ thay đổi ra sao, vì sao vậy?"
+          }
+        ],
+        "checks": [
+          {
+            "id": "definition",
+            "status": "met",
+            "met_points": 1,
+            "total_points": 1
+          },
+          {
+            "id": "low",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "high",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "usage",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "sampling",
+            "status": "missing",
+            "met_points": 1,
+            "total_points": 3
+          }
+        ],
+        "initial": [
+          "definition"
+        ],
+        "target": "low",
+        "grading_version": 2,
+        "updated_at": "2026-09-18T02:27:11.206176+00:00",
+        "criteria": [
+          {
+            "id": "definition",
+            "label": "Bản chất temperature",
+            "source": "T04-072",
+            "question": "Khi mô hình chọn từ tiếp theo, temperature tác động vào quá trình đó như thế nào?"
+          },
+          {
+            "id": "low",
+            "label": "Khi temperature thấp",
+            "source": "T04-072",
+            "question": "Nếu giảm temperature, cách chọn từ và kết quả giữa những lần chạy sẽ thay đổi ra sao, vì sao vậy?"
+          },
+          {
+            "id": "high",
+            "label": "Khi temperature cao",
+            "source": "T04-071–T04-072",
+            "question": "Nếu tăng temperature, những từ ít có khả năng xuất hiện sẽ có cơ hội thế nào và kết quả sẽ ra sao?"
+          },
+          {
+            "id": "usage",
+            "label": "Áp dụng vào tình huống",
+            "source": "T04-071–T04-072",
+            "question": "Cậu sẽ chọn temperature như thế nào cho trích xuất dữ liệu và nghĩ ý tưởng quảng cáo, và vì sao?"
+          },
+          {
+            "id": "sampling",
+            "label": "Phân biệt top-k / top-p",
+            "source": "T04-071–T04-072",
+            "question": "Mình còn lẫn temperature với top-k và top-p; cậu phân biệt vai trò của ba tham số này được không?"
+          }
+        ]
+      },
+      "actual": [
+        "met",
+        "missing",
+        "missing",
+        "missing",
+        "missing"
+      ],
+      "automated_result": "pass",
+      "finished_at_utc": "2026-09-18T02:27:11.220176+00:00",
+      "semantic_review": "pending"
+    },
+    {
+      "id": "G02",
+      "mode": "live_ai",
+      "started_at_utc": "2026-09-18T02:27:11.228683+00:00",
+      "steps": [
+        {
+          "id": "7b8257cb-7386-4eab-8c79-dfad6b4da6a2",
+          "created_at": "2026-09-18T02:27:11.221465+00:00",
+          "status": "active",
+          "turn": 1,
+          "probes": 1,
+          "messages": [
+            {
+              "role": "assistant",
+              "text": "Mình nghe về temperature nhưng chưa hiểu lắm. Cậu giải thích cho mình bằng lời của cậu được không?"
+            },
+            {
+              "role": "user",
+              "text": "Temperature và sampling là hai từ mình vừa thấy trên slide."
+            },
+            {
+              "role": "assistant",
+              "text": "Mình hỏi tiếp nhé: Khi mô hình chọn từ tiếp theo, temperature tác động vào quá trình đó như thế nào?"
+            }
+          ],
+          "checks": [
+            {
+              "id": "definition",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Người học chưa giải thích cơ chế temperature điều chỉnh phân bố xác suất hay độ ngẫu nhiên khi chọn token tiếp theo.",
+                  "point_id": "p1",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Bạn có thể giải thích cụ thể temperature điều chỉnh xác suất chọn token như thế nào không?"
+            },
+            {
+              "id": "low",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nói đến ưu tiên token có xác suất cao khi temperature thấp.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nói đến kết quả ít ngẫu nhiên và ổn định hơn khi temperature thấp.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Khi temperature thấp, token được chọn có đặc điểm gì và kết quả có tính ổn định thế nào?"
+            },
+            {
+              "id": "high",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nói đến cơ chế tăng cơ hội chọn token ít xác suất khi temperature cao.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nói đến kết quả đa dạng và ngẫu nhiên hơn khi temperature cao.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Khi tăng temperature, những token ít xác suất sẽ có cơ hội thế nào và kết quả ra sao?"
+            },
+            {
+              "id": "usage",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nêu ví dụ về sử dụng temperature thấp trong tình huống cần kết quả nhất quán và lý do.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa nêu ví dụ sử dụng temperature cao trong tình huống cần đa dạng và lý do.",
+                  "point_id": "p2",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Bạn có thể cho ví dụ về tình huống nên dùng temperature thấp và lý do không?"
+            },
+            {
+              "id": "sampling",
+              "status": "missing",
+              "evidence": "",
+              "points": [
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa phân biệt rõ vai trò top-k giữ số lượng token xác suất cao nhất.",
+                  "point_id": "p1",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa phân biệt rõ vai trò top-p giữ token dựa trên xác suất cộng dồn.",
+                  "point_id": "p2",
+                  "evidence": ""
+                },
+                {
+                  "status": "missing",
+                  "user_turn": 0,
+                  "diagnosis": "Chưa phân biệt rõ vai trò temperature điều chỉnh phân bố lấy mẫu, không phải số lượng token.",
+                  "point_id": "p3",
+                  "evidence": ""
+                }
+              ],
+              "contradiction": {
+                "present": false,
+                "user_turn": 0,
+                "evidence": ""
+              },
+              "focus_point": "p1",
+              "probe": "Bạn có thể giải thích sự khác nhau về vai trò của top-k, top-p và temperature không?"
+            }
+          ],
+          "initial": [],
+          "history": [
+            {
+              "turn": 1,
+              "prompted_for": null,
+              "checks": [
+                {
+                  "id": "definition",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Người học chưa giải thích cơ chế temperature điều chỉnh phân bố xác suất hay độ ngẫu nhiên khi chọn token tiếp theo.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Bạn có thể giải thích cụ thể temperature điều chỉnh xác suất chọn token như thế nào không?"
+                },
+                {
+                  "id": "low",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nói đến ưu tiên token có xác suất cao khi temperature thấp.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nói đến kết quả ít ngẫu nhiên và ổn định hơn khi temperature thấp.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Khi temperature thấp, token được chọn có đặc điểm gì và kết quả có tính ổn định thế nào?"
+                },
+                {
+                  "id": "high",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nói đến cơ chế tăng cơ hội chọn token ít xác suất khi temperature cao.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nói đến kết quả đa dạng và ngẫu nhiên hơn khi temperature cao.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Khi tăng temperature, những token ít xác suất sẽ có cơ hội thế nào và kết quả ra sao?"
+                },
+                {
+                  "id": "usage",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nêu ví dụ về sử dụng temperature thấp trong tình huống cần kết quả nhất quán và lý do.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa nêu ví dụ sử dụng temperature cao trong tình huống cần đa dạng và lý do.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Bạn có thể cho ví dụ về tình huống nên dùng temperature thấp và lý do không?"
+                },
+                {
+                  "id": "sampling",
+                  "status": "missing",
+                  "evidence": "",
+                  "points": [
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa phân biệt rõ vai trò top-k giữ số lượng token xác suất cao nhất.",
+                      "point_id": "p1",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa phân biệt rõ vai trò top-p giữ token dựa trên xác suất cộng dồn.",
+                      "point_id": "p2",
+                      "evidence": ""
+                    },
+                    {
+                      "status": "missing",
+                      "user_turn": 0,
+                      "diagnosis": "Chưa phân biệt rõ vai trò temperature điều chỉnh phân bố lấy mẫu, không phải số lượng token.",
+                      "point_id": "p3",
+                      "evidence": ""
+                    }
+                  ],
+                  "contradiction": {
+                    "present": false,
+                    "user_turn": 0,
+                    "evidence": ""
+                  },
+                  "focus_point": "p1",
+                  "probe": "Bạn có thể giải thích sự khác nhau về vai trò của top-k, top-p và temperature không?"
+                }
+              ],
+              "response_id": "resp_0a12c1ed0190af99016aaca17f967087d1b2024172d637e8f6"
+            }
+          ],
+          "target": "definition",
+          "grading_version": 2,
+          "updated_at": "2026-09-18T02:27:16.889103+00:00"
+        }
+      ],
+      "last_public_session": {
+        "id": "7b8257cb-7386-4eab-8c79-dfad6b4da6a2",
+        "created_at": "2026-09-18T02:27:11.221465+00:00",
+        "status": "active",
+        "turn": 1,
+        "probes": 1,
+        "messages": [
+          {
+            "role": "assistant",
+            "text": "Mình nghe về temperature nhưng chưa hiểu lắm. Cậu giải thích cho mình bằng lời của cậu được không?"
+          },
+          {
+            "role": "user",
+            "text": "Temperature và sampling là hai từ mình vừa thấy trên slide."
+          },
+          {
+            "role": "assistant",
+            "text": "Mình hỏi tiếp nhé: Khi mô hình chọn từ tiếp theo, temperature tác động vào quá trình đó như thế nào?"
+          }
+        ],
+        "checks": [
+          {
+            "id": "definition",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 1
+          },
+          {
+            "id": "low",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "high",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "usage",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 2
+          },
+          {
+            "id": "sampling",
+            "status": "missing",
+            "met_points": 0,
+            "total_points": 3
+          }
+        ],
+        "initial": [],
+        "target": "definition",
+        "grading_version": 2,
+        "updated_at": "2026-09-18T02:27:16.889103+00:00",
+        "criteria": [
+          {
+            "id": "definition",
+            "label": "Bản chất temperature",
+            "source": "T04-072",
+            "question": "Khi mô hình chọn từ tiếp theo, temperature tác động vào quá trình đó như thế nào?"
+          },
+          {
+            "id": "low",
+            "label": "Khi temperature thấp",
+            "source": "T04-072",
+            "question": "Nếu giảm temperature, cách chọn từ và kết quả giữa những lần chạy sẽ thay đổi ra sao, vì sao vậy?"
+          },
+          {
+            "id": "high",
+            "label": "Khi temperature cao",
+            "source": "T04-071–T04-072",
+            "question": "Nếu tăng temperature, những từ ít có khả năng xuất hiện sẽ có cơ hội thế nào và kết quả sẽ ra sao?"
+          },
+          {
+            "id": "usage",
+            "label": "Áp dụng vào tình huống",
+            "source": "T04-071–T04-072",
+            "question": "Cậu sẽ chọn temperature như thế nào cho trích xuất dữ liệu và nghĩ ý tưởng quảng cáo, và vì sao?"
+          },
+          {
+            "id": "sampling",
+            "label": "Phân biệt top-k / top-p",
+            "source": "T04-071–T04-072",
+            "question": "Mình còn lẫn temperature với top-k và top-p; cậu phân biệt vai trò của ba tham số này được không?"
+          }
+        ]
+      },
+      "actual": [
+        "missing",
+        "missing",
+        "missing",
+        "missing",
+        "missing"
+      ],
+      "automated_result": "pass",
+      "finished_at_utc": "2026-09-18T02:27:16.909156+00:00",
+      "semantic_review": "pending"
+    },
+    {
+      "id": "G03",
+      "mode": "live_ai",
+      "started_at_utc": "2026-09-18T02:27:16.923309+00:00",
+      "steps": [],
+      "automated_result": "fail",
+      "error": "AppError: AI chưa trả về đánh giá đầy đủ. Hãy thử lại.",
+      "finished_at_utc": "2026-09-18T02:27:21.416133+00:00",
+      "semantic_review": "pending"
+    }
+  ]
+}
