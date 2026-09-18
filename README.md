@@ -8,7 +8,7 @@
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-| Trần Hữu Đức | 2A2026 | Nhóm trưởng | Điều phối và phân công công việc, theo dõi tiến độ các checkpoint; tổng hợp khảo sát và bằng chứng nhu cầu, hoàn thiện Canvas và AI Spec; tổ chức dùng thử, tổng hợp phản hồi; chuẩn bị nội dung thuyết trình và nộp bài thay nhóm. |
+| Trần Hữu Đức | 2A202602459 | Nhóm trưởng | Điều phối và phân công công việc, theo dõi tiến độ các checkpoint; tổng hợp khảo sát và bằng chứng nhu cầu, hoàn thiện Canvas và AI Spec; tổ chức dùng thử, tổng hợp phản hồi; chuẩn bị nội dung thuyết trình và nộp bài thay nhóm. |
 | Lê Quang Ngọc | 2A202602664 | Dev | Thiết kế kiến trúc và luồng xử lý của prototype “học trò AI”; phát triển backend, tích hợp API AI và xây dựng prompt đối chiếu lời giải thích với checklist; xử lý logic hỏi ngược, kết thúc phiên và ghi nhận kết quả; tích hợp các thành phần, rà soát mã nguồn và xử lý lỗi kỹ thuật chính. |
 | Doãn Hữu Nguyên | 2A202602671 | Dev | Phát triển giao diện để học viên nhập lời giải thích, trao đổi với “học trò AI” và xem kết quả; kết nối giao diện với backend, xử lý trạng thái tải và thông báo lỗi; phối hợp xây dựng bộ câu thử, chạy kiểm thử và ghi nhận kết quả; sửa lỗi, hỗ trợ quay video demo và chuẩn bị bản chạy thử. |
 
