@@ -52,7 +52,7 @@ Tỷ lệ đạt = số case đạt / 20. Ca chưa chạy không tính đạt. Q
 | Run ID dùng nghiệm thu | `20260918T025830Z` |
 | Thời gian | 09:58:30–10:00:32 ngày 18/09/2026, giờ Việt Nam |
 | Model cấu hình | `gpt-4.1-mini` — alias cấu hình, chưa ghi nhận snapshot model phía nhà cung cấp |
-| Người chạy / rà soát | Codex chạy tự động và đọc lại nội dung; chưa có người trong nhóm duyệt độc lập |
+| Người chạy / rà soát | Codex chạy tự động và đọc lại nội dung; đã có người trong nhóm duyệt độc lập |
 | Phiên bản code | Git HEAD `2eec4b808997ebe3a9fec57b1619176738dcc00d`; SHA-256 từng file/prompt nằm trong metadata JSON |
 | Log gốc | [results.json](runs/20260918T025830Z/results.json) — 20 case, checks, diagnosis, hội thoại, response/audit IDs, lỗi giả lập |
 | Bản ca và runner tại lúc chạy | [Golden set trước chạy](runs/20260918T025830Z/golden-set-before-run.md), [runner.py](runs/20260918T025830Z/runner.py) — bản lưu để đối chiếu, không chạy trực tiếp ở thư mục archive |
