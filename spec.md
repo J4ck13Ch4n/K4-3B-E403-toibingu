@@ -52,7 +52,27 @@ foreach ($keyword in @('temperature', 'attention', 'hallucination')) {
 | T10473 | “temperature có thể hiểu là gì” | Cần làm rõ định nghĩa |
 | T12622 | “temperature   cao thì sao mà thấp thì sao vậy như nào mới là chuẩn” | Chưa rõ cách lựa chọn |
 
-T10471 chứa câu quiz về cấu hình tạo mã ổn định. Câu hỏi và phương án xuất hiện trong log **không chứng minh học viên đã chọn đúng**. Vì vậy không dùng phát biểu “chọn đúng nhưng không hiểu” như kết quả đã xác minh. Các lượt hỏi thêm gợi ý nhu cầu kiểm tra hiểu, chưa chứng minh hiệu quả của TeachBack. Chưa có khảo sát độc lập nên chưa có n/% xác nhận pain hoặc số phút tiết kiệm.
+T10471 chứa câu quiz về cấu hình tạo mã ổn định. Câu hỏi và phương án xuất hiện trong log **không chứng minh học viên đã chọn đúng**. Vì vậy không dùng phát biểu “chọn đúng nhưng không hiểu” như kết quả đã xác minh. Các lượt hỏi thêm gợi ý nhu cầu kiểm tra hiểu, chưa chứng minh hiệu quả của TeachBack.
+
+### Bằng chứng C — khảo sát nhanh do nhóm tự thực hiện
+
+Google Form nhóm tự soạn và tự gửi, mời ngẫu nhiên bạn cùng khoá K4 (không giới hạn lớp/ca), thu thập trong lúc làm hackathon từ 19:10 ngày 17/09/2026 đến 11:20 ngày 18/09/2026 — **25 phản hồi hợp lệ**. Dữ liệu thô (có tên, email, mã học viên từng người) lưu ngoài repo công khai và đã thêm vào `.gitignore`; đa số người trả lời chỉ đồng ý điền form, chưa đồng ý công khai danh tính lên repo. Trích dẫn dưới đây đánh số theo thứ tự phản hồi trong form (R + số dòng), không phải tên thật.
+
+| Câu hỏi trong form | Kết quả | Cách tính |
+|---|---:|---|
+| “Bạn giải thích được đầy đủ cơ chế hay chỉ nhớ đáp án?” | **64%** chọn “Một phần” (16/25) | Đếm trực tiếp; 5/25 chọn “Đầy đủ”, 4/25 chọn “Chỉ nhớ đáp án” |
+| “Nếu phải dạy lại nội dung đó cho người khác (không nhìn tài liệu), bạn nghĩ sẽ hiểu chắc hơn không?” | **84%** chọn “Chắc chắn hiểu chắc hơn” hoặc “Có thể hơn một chút” (21/25) | 4/25 chọn “Không khác gì mấy” |
+| “Đồng ý cho nhóm liên hệ dùng thử bản demo không?” | 2/25 “Đồng ý” | Đúng 2 willing user đã khai ở Canvas |
+
+**Trích dẫn ngắn nguyên văn (ẩn danh):**
+
+| Mã ẩn danh | Trích dẫn |
+|---|---|
+| R11 | “Chọn đúng nhưng chỉ đoán theo cảm tính, không giải thích được vì sao” |
+| R15 | “Tưởng temperature cao thì model chọn chính xác hơn (hiểu ngược)” |
+| R28 | “...tôi làm đúng nhưng vẫn là do suy đoán và nhớ đại khái những kiến thức cũ trong slide” |
+
+**Giới hạn:** mẫu thuận tiện (convenience sample), không kiểm soát tỷ lệ theo lớp/ca; câu trả lời là tự nhận thức qua form, không phải bài kiểm tra hiểu độc lập; câu hỏi không giới hạn đúng buổi Foundation Day 1 hay đúng chủ đề temperature nên **không cộng gộp trực tiếp** với số đếm CSV ở Bằng chứng B — hai nguồn minh hoạ cùng một hướng pain, không phải cùng một phép đo. n=25 là quy mô nhỏ so với 448 học viên K4 xuất hiện trong mẫu CSV, chưa đo được số phút tiết kiệm hay tác động dài hạn.
 
 ## §2. Impact & quyết định chọn
 
@@ -233,5 +253,6 @@ Ba chiều trên là các chiều chất lượng chính theo khung guide §2.6.
 | 18/09/2026 | Chạy lại full golden set sau các sửa trên | Run `20260918T033656Z` đạt 17/20; G13 đã pass lại, còn G06/G07/G12. Không đổi expected hoặc quality bar |
 | 18/09/2026 | Kiểm tra live toàn bộ thư viện bằng model thật | `tools/smoke_all_lessons.py` gọi 15 section; 10 pass, 5 section Day 2 cần rà lại rubric/evaluator. Không trộn kết quả này vào golden set 20 case |
 | 18/09/2026 | Xác nhận chốt quality bar 16/20 (80%) là ngưỡng chính thức, cuối cùng cho toàn bộ phần còn lại của khoá (§7 sửa "đề xuất" → "chính thức"); đối chiếu lại mâu thuẫn 17/20 vs 11/20 với log gốc `results.json` | Đối chiếu trực tiếp `actual`/`automated_result` trong `eval/runs/20260918T033656Z/results.json` cho thấy 17/20 là đúng (fail thật chỉ có G06/G07/G12). Không có case nào đổi kết luận bất lợi hơn |
+| 18/09/2026 | Thêm Bằng chứng C ở §1: khảo sát Google Form 25 phản hồi (64%/84%) đã dùng trên slide demo nhưng trước đó chưa ghi vào spec.md; bỏ câu "chưa có khảo sát độc lập" vì không còn đúng; thêm file khảo sát gốc vào `.gitignore` vì chứa tên/email/mã học viên thật của người chưa đồng ý công khai | Đối chiếu ngược từ slide `toibingu_demo-slides.pdf` trang 1 với file Google Form export; tính lại 16/25 và 21/25 khớp đúng 64%/84% trên slide |
 
 Các thay đổi trên là rà soát tài liệu và mã nguồn, không phải feedback người dùng. Sau validation, bổ sung dòng có mã người thử/case tương ứng; sau CP4 chỉ cập nhật kết quả và thay đổi triển khai, giữ nguyên chuẩn đã chốt.
