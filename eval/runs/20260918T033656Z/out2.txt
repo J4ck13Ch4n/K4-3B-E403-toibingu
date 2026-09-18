@@ -1,0 +1,20 @@
+G01 | actual=['met', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G02 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G03 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G04 | actual=['missing', 'incorrect', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G05 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G06 | actual=['missing', 'missing', 'missing', 'missing', 'met'] | automated_result=fail | error=AssertionError: Status mismatch: ['missing', 'missing', 'missing', 'missing', 'met']; expected ['met', 'missing', 'missing', 'missing', 'met']
+G07 | actual=None | automated_result=fail | error=AppError: AI trả về đánh giá không khớp rubric. Hãy thử lại.
+G08 | actual=['missing', 'met', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G09 | actual=['met', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G10 | actual=['missing', 'missing', 'missing', 'met', 'missing'] | automated_result=pass | error=None
+G11 | actual=['met', 'met', 'met', 'met', 'met'] | automated_result=pass | error=None
+G12 | actual=['missing', 'incorrect', 'missing', 'missing', 'missing'] | automated_result=fail | error=AssertionError: Status mismatch: ['missing', 'incorrect', 'missing', 'missing', 'missing']; expected [None, 'met', 'missing', 'missing', 'missing']
+G13 | actual=['met', 'incorrect', 'met', 'met', 'met'] | automated_result=pass | error=None
+G14 | actual=['missing', 'met', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G15 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G16 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G17 | actual=['missing', 'missing', 'missing', 'missing', 'missing'] | automated_result=pass | error=None
+G18 | actual=None | automated_result=pass | error=None
+G19 | actual=None | automated_result=pass | error=None
+G20 | actual=None | automated_result=pass | error=None

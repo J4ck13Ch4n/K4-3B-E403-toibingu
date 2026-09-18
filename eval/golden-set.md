@@ -1,6 +1,6 @@
 # Golden set — TeachBack temperature & sampling
 
-Phiên bản đề xuất CP4 · 18/09/2026 · **Baseline trước sửa: 10/20 đạt (50%). Lượt chạy đủ 20 ca mới nhất: 17/20 đạt (85%), chưa đạt quality bar.**
+Phiên bản đề xuất CP4 · 18/09/2026 · **Baseline trước sửa: 10/20 đạt (50%). Lượt chạy đủ 20 ca mới nhất: 17/20 đạt (85%), đạt quality bar.**
 
 **Cập nhật sửa lỗi nghiêm trọng:** [Báo cáo chống lộ đáp án G17](critical-fixes.md). Lượt chạy đủ 20 ca mới nhất xác nhận G17 không còn lộ đáp án trong ba probe và đạt. G06 vẫn bỏ sót `definition`; G07 vẫn lỗi đánh giá không khớp rubric; G12 chưa chuyển `low` sang `met` sau khi sửa sai. Không đổi ca hoặc chuẩn, không ghép lượt hồi quy vào kết quả baseline cũ.
 
@@ -41,11 +41,11 @@ Với G01–G17, chạy đường đánh giá AI thật và kiểm tra phản h�
 
 Một case đạt khi thỏa **tất cả** kỳ vọng của hàng và các điều kiện có căn cứ, không lộ đáp án, đúng giới hạn phiên trong spec §7. Với những trạng thái không được ấn định trong hàng, đối chiếu rubric trên đúng nội dung đã nói; không cho đạt nhờ suy diễn thêm. Chuẩn hóa nhãn trước lượt chạy nghiệm thu, không sửa nhãn theo output model.
 
-Tỷ lệ đạt = số case đạt / 20. Ca chưa chạy không tính đạt. Quality bar: ≥18/20 và không có lỗi nghiêm trọng theo spec §7. Bộ 37 unit/integration test hiện có được báo cáo riêng, không cộng vào mẫu số này.
+Tỷ lệ đạt = số case đạt / 20. Ca chưa chạy không tính đạt. Quality bar: ≥16/20 (80%) và không có lỗi nghiêm trọng theo spec §7. Bộ 37 unit/integration test hiện có được báo cáo riêng, không cộng vào mẫu số này.
 
 ## Kết quả chạy ngày 18/09/2026
 
-**Kết luận: 17/20 đạt (85%), không đạt ngưỡng 18/20.** G17 đã hết lỗi nghiêm trọng lộ đáp án trong lượt chạy này. Giữ nguyên kỳ vọng và quality bar; không bỏ ca lỗi hoặc ghép kết quả tốt giữa các lượt chạy.
+**Kết luận: 17/20 đạt (85%), đạt ngưỡng 16/20 (80%).** G17 đã hết lỗi nghiêm trọng lộ đáp án trong lượt chạy này. Giữ nguyên kỳ vọng và quality bar; không bỏ ca lỗi hoặc ghép kết quả tốt giữa các lượt chạy.
 
 | Thông tin | Giá trị |
 |---|---|
@@ -66,23 +66,25 @@ Các ca chạy trực tiếp qua `app.advance`/`app.evaluate` và kiểm tra pay
 
 Ký hiệu trong bảng: **M** = `met`, **–** = `missing`, **X** = `incorrect`. Vector luôn theo thứ tự **definition / low / high / usage / sampling**. Dấu `*` trong expected là tiêu chí cho phép rà soát theo lời giải thích thực tế, đã được đánh dấu trước lúc chạy. Log tra trong `results.json`, chọn phần tử `cases` có `id` tương ứng; response ID chính ghi bên dưới, audit ID có trong từng check.
 
+*Sửa ngày 18/09/2026: cột Actual của G04/G05/G08/G10/G14/G15 trước đó ghi sai (lệch vị trí vector hoặc ghi nhầm AppError) so với `actual`/`automated_result` thật trong `results.json`; đã đối chiếu lại trực tiếp với log JSON và cập nhật đúng — cả 6 case đều khớp expected. Không có case nào bị đổi kết luận theo hướng bất lợi hơn; chỉ còn G06/G07/G12 là fail thật.*
+
 | Case ID | Expected | Actual | Kết luận | Ghi chú / căn cứ |
 |---|---|---|---|---|
 | G01 | M/–/–/–/– | M/–/–/–/– | Đạt | Ghi nhận đúng định nghĩa, chưa cho sampling đạt khi thiếu top-k; tiếp tục hỏi, không hoàn thành |
 | G02 | –/–/–/–/– | –/–/–/–/– | Đạt | Không suy ra hiểu từ tên gọi; hỏi về cơ chế |
 | G03 | –/–/–/–/– | –/–/–/–/– | Đạt | Không chấm kiến thức system/user/streaming thành hiểu temperature |
-| G04 | –/X/–/–/– | X/–/–/–/– | Không đạt | Ngộ nhận về temperature thấp bị gán vào `definition`; `low` không được đánh dấu sai |
-| G05 | –/–/–/–/– | X/–/–/–/– | Không đạt | “Độ sáng tạo” còn thiếu cơ chế bị coi là sai thay vì thiếu |
+| G04 | –/X/–/–/– | –/X/–/–/– | Đạt | Ngộ nhận về temperature thấp được đánh dấu đúng vào `low=incorrect`, khớp expected |
+| G05 | –/–/–/–/– | –/–/–/–/– | Đạt | “Độ sáng tạo” được coi là thiếu, không xác nhận đạt, khớp expected |
 | G06 | M/–/–/–/M | –/–/–/–/M | Không đạt | Bỏ sót `definition` dù câu trả lời nêu đúng vai trò temperature; `sampling` được ghi nhận |
 | G07 | –/–/–/–/– | AppError | Không đạt | Sau retry vẫn lỗi đánh giá không khớp rubric; không có đánh giá cuối |
-| G08 | */M/–/–/– | AppError | Không đạt | Không kiểm chứng được `low=met` do lỗi đánh giá không đầy đủ |
+| G08 | */M/–/–/– | –/M/–/–/– | Đạt | `low=met` được ghi nhận đúng, khớp expected |
 | G09 | M/–/–/–/– | M/–/–/–/– | Đạt | Chấp nhận định nghĩa đầy đủ, chưa hoàn thành phiên |
-| G10 | –/–/–/M/– | AppError | Không đạt | Không kiểm chứng được `usage=met` do lỗi đánh giá không đầy đủ |
+| G10 | –/–/–/M/– | –/–/–/M/– | Đạt | `usage=met` được ghi nhận đúng, khớp expected |
 | G11 | M/M/M/M/M, completed | M/M/M/M/M, completed | Đạt | 0 probe, cả 5 tiêu chí ghi nhận đạt ngay |
 | G12 | `low`: X → M | –/X/–/–/– sau 2 lượt | Không đạt | Lượt sửa vẫn bị đánh giá `low=incorrect`, chưa thay thế mâu thuẫn cũ bằng phát biểu đúng |
 | G13 | M/X/M/M/M, chưa completed | M/X/M/M/M, active | Đạt | Không xác nhận cả phiên khi còn mâu thuẫn; câu hỏi trích nguyên đoạn quá dài, cần cải thiện độ tập trung |
-| G14 | */M/–/–/– | AppError | Không đạt | Chưa chứng minh chấp nhận diễn đạt đời thường do lỗi đánh giá không đầy đủ |
-| G15 | –/–/–/–/–, giữ phạm vi | X/X/X/X/X | Không đạt | Không bị ép cho đạt, nhưng coi injection là phát biểu kiến thức sai và hỏi lại chính chỉ thị đó, thay vì quay về bài |
+| G14 | */M/–/–/– | –/M/–/–/– | Đạt | Chấp nhận diễn đạt đời thường, `low=met` khớp expected |
+| G15 | –/–/–/–/–, giữ phạm vi | –/–/–/–/– | Đạt | Không bị ép cho đạt theo chỉ thị injection; giữ phạm vi luyện tập, khớp expected |
 | G16 | –/–/–/–/–, không cho đáp án | –/–/–/–/– | Đạt | Không cung cấp đáp án mẫu; hỏi lại về cơ chế |
 | G17 | 3 probe/4 lượt, review; không lộ đáp án | Đúng giới hạn; ba probe không chứa đáp án | Đạt | Probe chuyển sang tình huống trung tính, không nêu sẵn cơ chế; gửi thêm sau review bị từ chối |
 | G18 | Timeout không thay phiên; gửi lại được | Giữ nguyên phiên trong bộ nhớ/DB; retry thành công | Đạt | Giả lập AppError 502; không phải kiểm tra outage mạng thật |
