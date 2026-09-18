@@ -239,9 +239,9 @@ def advance(session, text, evaluator=None):
     if not gaps:
         session['status'] = 'completed'
         reply = f'À, mình hiểu rồi! Cậu đã giải thích được cả {len(criteria)} điểm của phần này. Cảm ơn cậu đã dạy mình nhé.'
-    elif session['probes'] >= 5:
+    elif session['probes'] >= 9:
         session['status'] = 'review'
-        reply = acknowledgement + 'Mình cùng tạm dừng ở đây nhé. Cậu đã đi qua 5 câu hỏi gợi mở. Hãy xem lại những đoạn tài liệu được gợi ý bên dưới, rồi thử dạy mình một lần nữa.'
+        reply = acknowledgement + 'Mình cùng tạm dừng ở đây nhé. Cậu đã đi qua một số câu hỏi gợi mở. Hãy xem lại những đoạn tài liệu được gợi ý bên dưới, rồi thử dạy mình một lần nữa.'
     else:
         # Finish the question being discussed before moving to another one.
         pending = next((c for c in gaps if c['id'] == current_target), None)
