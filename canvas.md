@@ -10,12 +10,14 @@
 
 - **3 · Problem statement + impact**
   **Problem statement (không chữ AI):** Học viên không có cách nào xác nhận đã thực sự hiểu một khái niệm sau khi học, ngoài trả lời đúng câu hỏi trắc nghiệm — vốn không phân biệt được "nhớ đáp án" và "hiểu cơ chế".
-  **Impact 3 ứng viên:**
-  - *Temperature/sampling* (chọn) — 448 học viên K4, 1 lần/khoá (buổi Day 1), tốn: cấu hình sai khi áp dụng thực tế + mất thời gian tự dò lại
-  - *Attention/self-attention* — 13 lượt hỏi riêng buổi này, 1 lần/khoá — loại vì khái niệm trừu tượng, khó chấm "đạt" rõ ràng, rủi ro build cao
-  - *Hallucination ("vì sao LLM bịa")* — rải rác nhiều buổi, lặp lại nhiều lần — loại vì trùng đúng ví dụ mẫu có sẵn trong đề D3, mất điểm khác biệt
+  **Impact 3 phương án sản phẩm** (cùng job executor, cùng bằng chứng — `ask_probing_question` 0,21% + khảo sát 25 người 64%/84%, chi tiết ở `spec.md` §2):
+  - *A · TeachBack — dạy lại cho "Mầm"* (chọn) — giữ được vòng hỏi ngược có kiểm soát trước khi kết luận "đã hiểu", khớp đúng tín hiệu tutor hiện tại hiếm hỏi lại (0,21%); khảo sát 84% tin dạy lại giúp hiểu chắc hơn
+  - *B · Hỏi ngược ngay trong quiz VLearn* — loại vì phải sửa/tích hợp trực tiếp vào hệ thống quiz thật của VLearn, không khả thi build trong 39 giờ
+  - *C · Form tự chấm một lượt, không hỏi lại* — loại vì dễ báo "đạt" cho câu trả lời mới đúng một phần (64% khảo sát chỉ tự nhận giải thích được "một phần"), vi phạm nguyên tắc báo đạt sai phải đắt hơn báo thiếu sai
 
-  **Lý do chọn temperature:** duy nhất có sẵn 1 câu quiz thật trong data (golden-set item miễn phí) + checklist 5 điểm rõ ràng không mơ hồ.
+  **Lý do chọn A:** duy nhất vừa giữ được bước hỏi ngược vừa giới hạn được phạm vi chấm bằng checklist cố định để build trong 39 giờ.
+
+  **Ghi chú phạm vi (không phải bảng impact thứ hai):** chọn xong sản phẩm rồi mới chọn nội dung khởi động là temperature/sampling — duy nhất có sẵn 1 câu quiz thật trong data (golden-set item miễn phí) + checklist 5 điểm rõ ràng, so với attention/self-attention (khái niệm trừu tượng, khó chấm "đạt" rõ ràng) và hallucination (trùng ví dụ mẫu có sẵn trong đề D3) — chi tiết ở `spec.md` §4.
 
 - **4 · Lát cắt prototype được**
   Một học viên · vừa học xong một khái niệm trong buổi giảng · dạy lại khái niệm đó cho agent "học trò AI" · AI so khớp lời giải thích với checklist các điểm bắt buộc rút từ tài liệu (transcript/slide) của khái niệm đó để quyết định đã đủ đúng hay còn hổng, nếu hổng thì hỏi ngược đúng chỗ thiếu mà không tiết lộ đáp án · kết quả là xác nhận "đã dạy được" kèm log điểm nào tự giải thích đúng ngay, điểm nào phải được hỏi mới bổ sung.

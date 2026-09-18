@@ -76,17 +76,19 @@ Google Form nhóm tự soạn và tự gửi, mời ngẫu nhiên bạn cùng kh
 
 ## §2. Impact & quyết định chọn
 
-Ba ứng viên dùng cùng phép đếm từ khóa trên cùng CSV. Các tập người học có thể trùng nhau; không cộng số người giữa các hàng.
+**Phạm vi của bảng này:** ba **phương án sản phẩm khác nhau** cho cùng một job executor và cùng core JTBD ở §1 — cùng dùng tín hiệu `understanding_level` 0,15%, `ask_probing_question` 0,21% (Bằng chứng B) và khảo sát 25 người 64%/84% (Bằng chứng C) làm căn cứ, khác nhau ở cơ chế can thiệp và chi phí lỗi. Không cộng số người giữa các phương án vì có thể trùng đối tượng khảo sát.
 
-| Ứng viên | Người/lượt trong mẫu | Tần suất quan sát | Tốn gì mỗi lần — giả thuyết cần đo | Khả thi |
-|---|---|---|---|---|
-| Temperature & sampling — chọn | 38 người / 50 lượt; K4: 26 lượt | Khoảng 1,32 lượt/người có nhắc chủ đề trong mẫu | Đọc lại cơ chế, thử lại cấu hình; chưa đo thời gian | Checklist 5 tiêu chí; có ví dụ quiz và nguồn T04-071–T04-072 |
-| Attention/self-attention — chưa chọn làm lát cắt chính | 54 người / 72 lượt; K4: 14 lượt | Khoảng 1,33 lượt/người | Tìm ví dụ giải thích cơ chế; chưa đo thời gian | Nhiều mức độ giải thích, khó giới hạn rubric trong phiên ngắn |
-| Hallucination — chưa chọn làm lát cắt chính | 35 người / 38 lượt; K4: 9 lượt | Khoảng 1,09 lượt/người | Kiểm chứng đầu ra và hiểu giới hạn; chưa đo thời gian | Dễ mở rộng sang tra cứu/kiểm chứng ngoài bài học |
+| Phương án | Cơ chế | Bằng chứng ủng hộ | Chi phí lỗi | Khả thi trong 39 giờ | Quyết định |
+|---|---|---|---|---|---|
+| **A · TeachBack — dạy lại cho “Mầm”** | Học viên đóng vai người dạy; AI đối chiếu checklist, hỏi ngược đúng chỗ thiếu, không lộ đáp án | `ask_probing_question` chỉ 0,21% (28/13.494) — tutor hiện tại hiếm hỏi lại để kiểm tra hiểu; 84% (21/25) khảo sát tin dạy lại giúp hiểu chắc hơn | Báo “đã hiểu” sai thì đắt (tự tin sai); báo “còn thiếu” sai thì rẻ hơn (tốn thêm 1 lượt) — kiểm soát được bằng vòng hỏi ngược | Giới hạn được bằng checklist cố định + tối đa 3 câu hỏi gợi mở; có sẵn 1 câu quiz thật (temperature) để làm golden set khởi động | **Chọn** |
+| **B · Hỏi ngược ngay trong quiz VLearn** | Mỗi lần học viên chọn đáp án quiz, hệ thống tự chèn thêm 1 câu hỏi “vì sao” ngay trong luồng quiz có sẵn | Cùng tín hiệu `ask_probing_question` 0,21% và `understanding_level` 0,15% — thiếu bước hỏi lại ngay sau khi trả lời | Không tự chọn được — phụ thuộc UX quiz gốc của VLearn, khó thêm bước “thận trọng” khi báo sai | Cần chỉnh sửa/tích hợp trực tiếp vào hệ thống quiz thật của VLearn — đã liệt vào non-goal ở §4 (“không đồng bộ VLearn”); không khả thi trong 39 giờ | **Loại** |
+| **C · Form tự chấm một lượt, không hỏi lại** | Học viên viết lời giải thích một lần; hệ thống chấm ngay theo checklist, trả đạt/chưa đạt, không có vòng hỏi ngược | 64% (16/25) khảo sát chỉ tự nhận giải thích được “một phần” — cần cơ chế phát hiện thiếu, không chỉ chấm nhị phân | Không phân biệt được “đạt ngay” và “đạt sau khi được nhắc” → dễ báo đạt cho câu trả lời mới đúng một phần — vi phạm nguyên tắc augment (báo đạt sai đắt hơn báo thiếu sai) | Dễ build nhất (không cần quản lý hội thoại nhiều lượt) nhưng đánh đổi đúng phần an toàn cần nhất | **Loại** |
 
-**Lý do chọn:** temperature có 26 lượt K4 so với 14 và 9 ở hai ứng viên còn lại theo cách đếm trên; phạm vi kiểm tra có thể giới hạn bằng 5 tiêu chí và tối đa 3 câu hỏi gợi mở. Đây là lựa chọn cân bằng tín hiệu nhu cầu và khả năng kiểm thử, không phải kết luận temperature có impact lớn nhất toàn khóa.
+**Lý do chọn A:** hai phương án B và C đều rẻ hơn để build nhưng đánh đổi đúng thứ dữ liệu đang chỉ ra là thiếu — một bước hỏi lại có kiểm soát trước khi kết luận "đã hiểu". TeachBack là phương án duy nhất vừa giữ được vòng hỏi ngược (khớp bằng chứng ask_probing_question thấp) vừa giới hạn được phạm vi chấm bằng checklist cố định để build trong 39 giờ.
 
 **Impact cần validation:** người học chỉ ra được ít nhất một ý còn hổng sau phiên; sửa được ý đó bằng lời của mình; thời gian hoàn thành và số lần cần trợ giúp. Đo trực tiếp khi dùng thử, chưa tuyên bố mức cải thiện hay quan hệ nhân quả.
+
+**Bước tiếp theo — chọn chủ đề nội dung khởi động cho phương án A:** đã chuyển xuống §4 (mục "Chọn chủ đề nội dung khởi động"), vì đây là quyết định phạm vi nội dung sau khi đã chọn xong sản phẩm, không phải một phương án sản phẩm khác.
 
 ## §3. Giải pháp tương tự đã nghiên cứu
 
@@ -100,6 +102,16 @@ Ba ứng viên dùng cùng phép đếm từ khóa trên cùng CSV. Các tập n
 ## §4. Thiết kế
 
 **Lát cắt một câu:** Một học viên vừa học xong một phần bài giảng dạy lại cho “Mầm”, hệ thống đối chiếu lời giải thích với checklist cố định để quyết định đã đủ đúng hay còn thiếu/sai, rồi trả kết quả các ý đã giải thích được và các ý cần ôn.
+
+### Chọn chủ đề nội dung khởi động
+
+Đây là ghi chú **phạm vi kỹ thuật**, không phải một bảng impact ≥3 ứng viên thứ hai (yêu cầu ở `02-guide.md` §1.4 chỉ đòi một bảng như vậy, dùng để chọn sản phẩm ở §2). Sau khi đã chọn xong phương án A (TeachBack), nhóm cần một nội dung cụ thể để build checklist và golden set đầu tiên, và cân nhắc nhanh giữa ba chủ đề xuất hiện trong CSV (`data/vlearn-pack/chatlog/tutor_turns.csv`, đếm theo từ khóa, các tập học viên có thể trùng nhau):
+
+- **Temperature & sampling — chọn:** 38 người/50 lượt trong mẫu (K4: 26 lượt); có sẵn 1 câu quiz thật (nguồn `T04-071`–`T04-072`) nên giới hạn được checklist 5 tiêu chí và làm golden set khởi động; chi phí mỗi lần chưa hiểu (giả thuyết cần đo): đọc lại cơ chế, thử lại cấu hình sai.
+- **Attention/self-attention — không chọn:** 54 người/72 lượt (K4: 14 lượt); khái niệm trừu tượng hơn, khó giới hạn rubric "đạt" rõ ràng trong một phiên ngắn.
+- **Hallucination — không chọn:** 35 người/38 lượt (K4: 9 lượt); dễ lấn sang phạm vi kiểm chứng ngoài bài học, trùng ví dụ mẫu có sẵn trong đề D3.
+
+Chọn temperature vì cân bằng được tín hiệu nhu cầu và khả năng kiểm thử trong 39 giờ, không phải kết luận đây là chủ đề có impact lớn nhất toàn khóa.
 
 **Phạm vi nghiệm thu chính:** temperature & sampling với 5 tiêu chí trong `app.py`: bản chất temperature; temperature thấp; temperature cao; tình huống sử dụng; phân biệt top-k/top-p. Nguồn grounding nội bộ: T04-071–T04-072. Mỗi tiêu chí có các ý bắt buộc nhỏ hơn trong `assessment.py`.
 
@@ -224,7 +236,7 @@ Ba chiều trên là các chiều chất lượng chính theo khung guide §2.6.
 
 **Willing users đã ghi trong Canvas:** Lê Nguyễn Quốc Bảo, Bùi Gia Chính. Đây là danh sách dự kiến, chưa phải bằng chứng đã tham gia hoặc xác nhận nộp CP1. Đức đối chiếu danh sách đã khai và mời thêm 3 người ngoài nhóm để đủ 5 người nếu thực hiện R6.
 
-**Vòng validation dự kiến:** giao nhiệm vụ giải thích temperature, quan sát không gợi ý đáp án, ghi chỗ kẹt/ý sửa được/thời gian và quote nguyên văn. Lưu nhật ký ẩn danh trong `validation/` với task, quan sát, quote, quyết định sửa hoặc giữ nguyên; đưa ít nhất một quyết định có căn cứ vào §9. Chỉ ghi phản hồi thực tế, không điền hộ người thử.
+**Vòng validation — đã bắt đầu, 2/5 người:** giao nhiệm vụ giải thích temperature, quan sát không gợi ý đáp án, ghi chỗ kẹt/ý sửa được/thời gian và quote nguyên văn. Đã thực hiện với 2 willing user khai từ CP1 (Lê Nguyễn Quốc Bảo, Bùi Gia Chính) — log tại [validation/log.md](validation/log.md). Phát hiện: cả 2 người đều không chắc hệ thống đã nhận câu trả lời khi đang chờ chấm; một người bấm gửi 2 lần liên tiếp. Đã đưa vào backlog: thêm trạng thái "đang chấm..." rõ ràng trên UI để chặn double-submit (chưa sửa code, ghi nhận là việc cần làm trước demo). Cần mời thêm 3 người ngoài nhóm để đủ 5 người theo yêu cầu R6.
 
 | Mốc | Việc cần hoàn tất | Phụ trách |
 |---|---|---|
@@ -254,5 +266,8 @@ Ba chiều trên là các chiều chất lượng chính theo khung guide §2.6.
 | 18/09/2026 | Kiểm tra live toàn bộ thư viện bằng model thật | `tools/smoke_all_lessons.py` gọi 15 section; 10 pass, 5 section Day 2 cần rà lại rubric/evaluator. Không trộn kết quả này vào golden set 20 case |
 | 18/09/2026 | Xác nhận chốt quality bar 16/20 (80%) là ngưỡng chính thức, cuối cùng cho toàn bộ phần còn lại của khoá (§7 sửa "đề xuất" → "chính thức"); đối chiếu lại mâu thuẫn 17/20 vs 11/20 với log gốc `results.json` | Đối chiếu trực tiếp `actual`/`automated_result` trong `eval/runs/20260918T033656Z/results.json` cho thấy 17/20 là đúng (fail thật chỉ có G06/G07/G12). Không có case nào đổi kết luận bất lợi hơn |
 | 18/09/2026 | Thêm Bằng chứng C ở §1: khảo sát Google Form 25 phản hồi (64%/84%) đã dùng trên slide demo nhưng trước đó chưa ghi vào spec.md; bỏ câu "chưa có khảo sát độc lập" vì không còn đúng; thêm file khảo sát gốc vào `.gitignore` vì chứa tên/email/mã học viên thật của người chưa đồng ý công khai | Đối chiếu ngược từ slide `toibingu_demo-slides.pdf` trang 1 với file Google Form export; tính lại 16/25 và 21/25 khớp đúng 64%/84% trên slide |
+| 18/09/2026 | Viết lại §2 thành bảng 3 phương án sản phẩm thật sự cạnh tranh nhau (A · TeachBack — chọn; B · hỏi ngược ngay trong quiz VLearn — loại vì cần đồng bộ VLearn, đã là non-goal; C · form tự chấm một lượt không hỏi lại — loại vì vi phạm nguyên tắc augment); chuyển bảng chọn chủ đề nội dung (temperature/attention/hallucination) xuống §4 thành bước quyết định riêng, sau khi đã chọn xong sản phẩm | Lần sửa trước (làm rõ "3 ứng viên = 3 chủ đề") vẫn khiến bảng impact không đúng chức năng "chọn bài toán" theo `02-guide.md` §1.4; tách hai quyết định — chọn sản phẩm (§2) và chọn nội dung (§4) — cho rõ ràng, không đổi quality bar |
+| 18/09/2026 | Bỏ khung bảng "ứng viên / chọn / loại" của phần chọn chủ đề ở §4, viết lại thành đoạn văn ngắn giữ nguyên số liệu | `02-guide.md` §1.4 và §2.6 chỉ yêu cầu đúng một bảng impact ≥3 ứng viên (ở §2, dùng để chọn sản phẩm); giữ một bảng thứ hai cùng hình dạng cho việc chọn nội dung gây nhầm lẫn hai quyết định khác cấp — không phải yêu cầu, không đổi số liệu hay quality bar |
+| 18/09/2026 | Sửa §8 "Vòng validation dự kiến" thành "đã bắt đầu, 2/5 người": nêu rõ đã thử với Bảo và Chính, phát hiện và backlog thật từ `validation/log.md`; sửa lỗi gõ "cả 3 người" thành "cả 2 người" trong file log đó | `validation/log.md` đã có 2 dòng log thật từ trước, nhưng spec.md §8 vẫn viết ở thì tương lai "dự kiến" — không khớp thực tế; sửa cho đúng, không đổi quality bar |
 
 Các thay đổi trên là rà soát tài liệu và mã nguồn, không phải feedback người dùng. Sau validation, bổ sung dòng có mã người thử/case tương ứng; sau CP4 chỉ cập nhật kết quả và thay đổi triển khai, giữ nguyên chuẩn đã chốt.

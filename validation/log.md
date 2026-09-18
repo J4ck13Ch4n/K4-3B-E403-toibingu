@@ -9,5 +9,5 @@
 
 - **Chủ đề lặp nhiều nhất:** người thử không chắc hệ thống đã nhận câu trả lời hay chưa khi đang chờ chấm.
 - **1-2 thay đổi làm trước demo:** thêm trạng thái "đang chấm..." rõ ràng trên UI để tránh double-submit.
-- **Giữ nguyên có lý do:** cách hỏi ngược khi thiếu ý — cả 3 người đều hiểu đúng ý câu hỏi ngược, không cần đổi cách diễn đạt.
+- **Giữ nguyên có lý do:** cách hỏi ngược khi thiếu ý — cả 2 người đều hiểu đúng ý câu hỏi ngược, không cần đổi cách diễn đạt.
 - **Đưa vào backlog:** chặn double-submit bằng disable nút khi đang gọi API.
