@@ -1,0 +1,202 @@
+{
+  "run_id": "20260918T035227Z",
+  "started_at_utc": "2026-09-18T03:52:27.872736+00:00",
+  "scope": "selected_regression",
+  "selected_cases": [
+    "G18",
+    "G19",
+    "G20"
+  ],
+  "total_golden_cases": 20,
+  "operator": "Codex",
+  "semantic_reviewer": "pending",
+  "model": "gpt-4.1-mini",
+  "git_head": "7fa24b40da4358843b68ca0d642ea8962aa38f03",
+  "sha256": {
+    "codebase/app.py": "b3a2344431020a1859f39f800b8e3f1ffd9e1a519f74843ebdd2d0cc21eedf0d",
+    "codebase/assessment.py": "ea550b70a33aa929fe9583a72d07e602d7907ad7b9fcfcf691e89d317fdfb51c",
+    "codebase/curriculum.py": "21f7f5cb80c92b3901335ba6e070d72caf81b024802ff9a5d68a449cb0455ed2",
+    "tools/run_golden_set.py": "33793d3fe22697f2a222149bb1dd25c2442e75ed47b837b67fb93eb13cd0f120"
+  },
+  "golden_set_sha256_before_run": "2fb1bef2dea7765a1796e0fceacde22adf41091059f70cdbf6c4bf24e865d91a",
+  "expected_status_order": [
+    "definition",
+    "low",
+    "high",
+    "usage",
+    "sampling"
+  ],
+  "expected": {
+    "G01": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G02": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G03": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G04": [
+      "missing",
+      "incorrect",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G05": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G06": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "met"
+    ],
+    "G07": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G08": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G09": [
+      "met",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G10": [
+      "missing",
+      "missing",
+      "missing",
+      "met",
+      "missing"
+    ],
+    "G11": [
+      "met",
+      "met",
+      "met",
+      "met",
+      "met"
+    ],
+    "G12": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G13": [
+      "met",
+      "incorrect",
+      "met",
+      "met",
+      "met"
+    ],
+    "G14": [
+      null,
+      "met",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G15": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G16": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ],
+    "G17": [
+      "missing",
+      "missing",
+      "missing",
+      "missing",
+      "missing"
+    ]
+  },
+  "cases": [
+    {
+      "id": "G18",
+      "mode": "injected_failure",
+      "started_at_utc": "2026-09-18T03:52:27.968262+00:00",
+      "steps": [],
+      "errors": [
+        "Injected API timeout"
+      ],
+      "retry_succeeded": true,
+      "automated_result": "pass",
+      "finished_at_utc": "2026-09-18T03:52:27.975112+00:00",
+      "semantic_review": "not_applicable"
+    },
+    {
+      "id": "G19",
+      "mode": "injected_failure",
+      "started_at_utc": "2026-09-18T03:52:27.981068+00:00",
+      "steps": [],
+      "errors": [
+        "AI chưa cung cấp bằng chứng nguyên văn hợp lệ. Hãy thử lại.",
+        "AI chưa cung cấp bằng chứng nguyên văn hợp lệ. Hãy thử lại."
+      ],
+      "automated_result": "pass",
+      "finished_at_utc": "2026-09-18T03:52:27.986120+00:00",
+      "semantic_review": "not_applicable"
+    },
+    {
+      "id": "G20",
+      "mode": "injected_failure",
+      "started_at_utc": "2026-09-18T03:52:27.991696+00:00",
+      "steps": [],
+      "errors": [
+        {
+          "variant": "missing_id",
+          "error": "AI trả về đánh giá không hợp lệ. Hãy thử gửi lại."
+        },
+        {
+          "variant": "duplicate_id",
+          "error": "AI trả về tiêu chí không hợp lệ. Hãy thử gửi lại."
+        },
+        {
+          "variant": "unknown_id",
+          "error": "AI trả về tiêu chí không hợp lệ. Hãy thử gửi lại."
+        }
+      ],
+      "automated_result": "pass",
+      "finished_at_utc": "2026-09-18T03:52:27.998324+00:00",
+      "semantic_review": "not_applicable"
+    }
+  ],
+  "finished_at_utc": "2026-09-18T03:52:28.000201+00:00"
+}

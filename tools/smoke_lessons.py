@@ -1,7 +1,7 @@
 """Real API smoke checks on authored answers, no persisted learner progress."""
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1] / 'codebase'))
 import app
 from curriculum import find_section
 

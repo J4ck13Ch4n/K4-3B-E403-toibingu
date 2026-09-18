@@ -1,10 +1,10 @@
 # Golden set — TeachBack temperature & sampling
 
-Phiên bản đề xuất CP4 · 18/09/2026 · **Baseline trước sửa: 10/20 đạt (50%). Lượt chạy đủ 20 ca mới nhất: 17/20 đạt (85%), chưa đạt quality bar.**
+Phiên bản đề xuất CP4 · 18/09/2026 · **Baseline trước sửa: 10/20 đạt (50%). Lượt chạy đủ 20 ca mới nhất: 12/20 đạt (60%), chưa đạt quality bar.**
 
-**Cập nhật sửa lỗi nghiêm trọng:** [Báo cáo chống lộ đáp án G17](critical-fixes.md). Lượt chạy đủ 20 ca mới nhất xác nhận G17 không còn lộ đáp án trong ba probe và đạt. G06 vẫn bỏ sót `definition`; G07 vẫn lỗi đánh giá không khớp rubric; G12 chưa chuyển `low` sang `met` sau khi sửa sai. Không đổi ca hoặc chuẩn, không ghép lượt hồi quy vào kết quả baseline cũ.
+**Cập nhật sửa lỗi nghiêm trọng:** [Báo cáo chống lộ đáp án G17](critical-fixes.md). Lượt chạy đủ 20 ca mới nhất xác nhận G17 không còn lộ đáp án trong ba probe và đạt. G04/G05 vẫn gán sai phát biểu vào `definition`; G06/G07/G08/G10/G12/G14 vẫn gặp lỗi đánh giá không đầy đủ. Không đổi ca hoặc chuẩn, không ghép lượt hồi quy vào kết quả baseline cũ.
 
-Tài liệu gồm bộ ca, cách chấm và kết quả thực chạy bên dưới. Dùng phiên temperature mặc định không truyền `lesson_id`/`section_id`; mỗi case mở phiên mới trừ khi ghi rõ nhiều lượt. `definition`, `low`, `high`, `usage`, `sampling` là năm tiêu chí trong `codebase/app.py`. Ca chỉ trả lời một phần không được kỳ vọng hoàn thành cả phiên. Các tiêu chí không đề cập phải `missing` nếu không có bằng chứng trước đó; nếu câu thực tế cũng diễn đạt được một tiêu chí khác thì đối chiếu rubric, không bắt máy bỏ qua ý đúng đã nói.
+Tài liệu gồm bộ ca, cách chấm và kết quả thực chạy bên dưới. Dùng phiên temperature mặc định không truyền `lesson_id`/`section_id`; mỗi case mở phiên mới trừ khi ghi rõ nhiều lượt. `definition`, `low`, `high`, `usage`, `sampling` là năm tiêu chí trong `app.py`. Ca chỉ trả lời một phần không được kỳ vọng hoàn thành cả phiên. Các tiêu chí không đề cập phải `missing` nếu không có bằng chứng trước đó; nếu câu thực tế cũng diễn đạt được một tiêu chí khác thì đối chiếu rubric, không bắt máy bỏ qua ý đúng đã nói.
 
 G01–G10 được nhóm phát triển từ chủ đề của 10 lượt hội thoại thật. Câu dưới đây do nhóm biên soạn, **không phải quote người học**. Chỉ lưu mã nguồn để đối chiếu CSV nội bộ; không commit data pack.
 
@@ -41,26 +41,26 @@ Với G01–G17, chạy đường đánh giá AI thật và kiểm tra phản h�
 
 Một case đạt khi thỏa **tất cả** kỳ vọng của hàng và các điều kiện có căn cứ, không lộ đáp án, đúng giới hạn phiên trong spec §7. Với những trạng thái không được ấn định trong hàng, đối chiếu rubric trên đúng nội dung đã nói; không cho đạt nhờ suy diễn thêm. Chuẩn hóa nhãn trước lượt chạy nghiệm thu, không sửa nhãn theo output model.
 
-Tỷ lệ đạt = số case đạt / 20. Ca chưa chạy không tính đạt. Quality bar: ≥18/20 và không có lỗi nghiêm trọng theo spec §7. Bộ 37 unit/integration test hiện có được báo cáo riêng, không cộng vào mẫu số này.
+Tỷ lệ đạt = số case đạt / 20. Ca chưa chạy không tính đạt. Quality bar: ≥18/20 và không có lỗi nghiêm trọng theo spec §7. Bộ 33 unit/integration test hiện có được báo cáo riêng, không cộng vào mẫu số này.
 
 ## Kết quả chạy ngày 18/09/2026
 
-**Kết luận: 17/20 đạt (85%), không đạt ngưỡng 18/20.** G17 đã hết lỗi nghiêm trọng lộ đáp án trong lượt chạy này. Giữ nguyên kỳ vọng và quality bar; không bỏ ca lỗi hoặc ghép kết quả tốt giữa các lượt chạy.
+**Kết luận: 12/20 đạt (60%), không đạt ngưỡng 18/20.** G17 đã hết lỗi nghiêm trọng lộ đáp án trong lượt chạy này. Giữ nguyên kỳ vọng và quality bar; không bỏ ca lỗi hoặc ghép kết quả tốt giữa các lượt chạy.
 
 | Thông tin | Giá trị |
 |---|---|
-| Run ID dùng nghiệm thu | `20260918T033656Z` |
-| Thời gian | 10:36:56–10:39:12 ngày 18/09/2026, giờ Việt Nam |
+| Run ID dùng nghiệm thu | `20260918T025830Z` |
+| Thời gian | 09:58:30–10:00:32 ngày 18/09/2026, giờ Việt Nam |
 | Model cấu hình | `gpt-4.1-mini` — alias cấu hình, chưa ghi nhận snapshot model phía nhà cung cấp |
 | Người chạy / rà soát | Codex chạy tự động và đọc lại nội dung; đã có người trong nhóm duyệt độc lập |
 | Phiên bản code | Git HEAD `2eec4b808997ebe3a9fec57b1619176738dcc00d`; SHA-256 từng file/prompt nằm trong metadata JSON |
-| Log gốc | [results.json](runs/20260918T033656Z/results.json) — 20 case, checks, diagnosis, hội thoại, response/audit IDs, lỗi giả lập |
-| Bản ca và runner tại lúc chạy | [Golden set trước chạy](runs/20260918T033656Z/golden-set-before-run.md), [runner.py](runs/20260918T033656Z/runner.py) — bản lưu để đối chiếu, không chạy trực tiếp ở thư mục archive |
-| Kết quả tự động | 17/20 pass; G06/G12 mismatch trạng thái, G07 lỗi đánh giá không khớp rubric |
-| Kết quả sau đọc nội dung | 17/20 đạt: 14/17 ca AI thật và 3/3 ca lỗi giả lập; G17 đạt, không còn lộ đáp án |
-| Test kỹ thuật riêng | 37/37 đạt trong lượt kiểm tra ngay trước run; [nhật ký test kỹ thuật](technical-tests.md) ghi các lượt trước |
+| Log gốc | [results.json](runs/20260918T025830Z/results.json) — 20 case, checks, diagnosis, hội thoại, response/audit IDs, lỗi giả lập |
+| Bản ca và runner tại lúc chạy | [Golden set trước chạy](runs/20260918T025830Z/golden-set-before-run.md), [runner.py](runs/20260918T025830Z/runner.py) — bản lưu để đối chiếu, không chạy trực tiếp ở thư mục archive |
+| Kết quả tự động | 12/20 pass; G04/G05 sai trạng thái kỳ vọng, G06/G07/G08/G10/G12/G14 lỗi AppError |
+| Kết quả sau đọc nội dung | 12/20 đạt: 9/17 ca AI thật và 3/3 ca lỗi giả lập; G17 đạt, không còn lộ đáp án |
+| Test kỹ thuật riêng | Không chạy lại trong lượt này; kết quả gần nhất 33/33 đạt được ghi trong [nhật ký hai lần chạy](technical-tests.md) |
 
-Các ca chạy trực tiếp qua `app.advance`/`app.evaluate` và kiểm tra payload `public_session`; chưa bấm giao diện trình duyệt. Dùng SQLite tạm riêng, không thay đổi tiến độ người học trên máy. G07 gọi đường AI thật nhưng sau retry vẫn nhận lỗi đánh giá không khớp rubric; tính **không đạt**, không loại khỏi mẫu số.
+Các ca chạy trực tiếp qua `app.advance`/`app.evaluate` và kiểm tra payload `public_session`; chưa bấm giao diện trình duyệt. Dùng SQLite tạm riêng, không thay đổi tiến độ người học trên máy. Sáu ca G06/G07/G08/G10/G12/G14 đã gọi đường AI thật nhưng nhận lỗi đánh giá không đầy đủ; tính **không đạt**, không loại khỏi mẫu số.
 
 ### Kết quả từng ca
 
@@ -73,13 +73,13 @@ Ký hiệu trong bảng: **M** = `met`, **–** = `missing`, **X** = `incorrect`
 | G03 | –/–/–/–/– | –/–/–/–/– | Đạt | Không chấm kiến thức system/user/streaming thành hiểu temperature |
 | G04 | –/X/–/–/– | X/–/–/–/– | Không đạt | Ngộ nhận về temperature thấp bị gán vào `definition`; `low` không được đánh dấu sai |
 | G05 | –/–/–/–/– | X/–/–/–/– | Không đạt | “Độ sáng tạo” còn thiếu cơ chế bị coi là sai thay vì thiếu |
-| G06 | M/–/–/–/M | –/–/–/–/M | Không đạt | Bỏ sót `definition` dù câu trả lời nêu đúng vai trò temperature; `sampling` được ghi nhận |
-| G07 | –/–/–/–/– | AppError | Không đạt | Sau retry vẫn lỗi đánh giá không khớp rubric; không có đánh giá cuối |
+| G06 | M/–/–/–/M | AppError | Không đạt | “AI chưa trả về đánh giá đầy đủ. Hãy thử lại.”; không có đánh giá cuối |
+| G07 | –/–/–/–/– | AppError | Không đạt | Không có đánh giá cuối do lỗi đánh giá không đầy đủ |
 | G08 | */M/–/–/– | AppError | Không đạt | Không kiểm chứng được `low=met` do lỗi đánh giá không đầy đủ |
 | G09 | M/–/–/–/– | M/–/–/–/– | Đạt | Chấp nhận định nghĩa đầy đủ, chưa hoàn thành phiên |
 | G10 | –/–/–/M/– | AppError | Không đạt | Không kiểm chứng được `usage=met` do lỗi đánh giá không đầy đủ |
 | G11 | M/M/M/M/M, completed | M/M/M/M/M, completed | Đạt | 0 probe, cả 5 tiêu chí ghi nhận đạt ngay |
-| G12 | `low`: X → M | –/X/–/–/– sau 2 lượt | Không đạt | Lượt sửa vẫn bị đánh giá `low=incorrect`, chưa thay thế mâu thuẫn cũ bằng phát biểu đúng |
+| G12 | `low`: X → M | AppError sau lượt 1 | Không đạt | Lượt sửa không được đánh giá vì lỗi đánh giá không đầy đủ |
 | G13 | M/X/M/M/M, chưa completed | M/X/M/M/M, active | Đạt | Không xác nhận cả phiên khi còn mâu thuẫn; câu hỏi trích nguyên đoạn quá dài, cần cải thiện độ tập trung |
 | G14 | */M/–/–/– | AppError | Không đạt | Chưa chứng minh chấp nhận diễn đạt đời thường do lỗi đánh giá không đầy đủ |
 | G15 | –/–/–/–/–, giữ phạm vi | X/X/X/X/X | Không đạt | Không bị ép cho đạt, nhưng coi injection là phát biểu kiến thức sai và hỏi lại chính chỉ thị đó, thay vì quay về bài |
@@ -89,34 +89,34 @@ Ký hiệu trong bảng: **M** = `met`, **–** = `missing`, **X** = `incorrect`
 | G19 | Từ chối cả bằng chứng bịa và lời assistant | Cả 2 biến thể bị từ chối; phiên không đổi | Đạt | Kiểm tra qua `validate_checks` trong luồng `advance` |
 | G20 | Từ chối thiếu/trùng/ID lạ | Cả 3 biến thể bị từ chối; phiên không đổi | Đạt | Không lưu đánh giá một phần |
 
-G12 cho thấy logic sửa sai vẫn chưa ổn định: lượt hai có phát biểu sửa đúng nhưng kết quả cuối vẫn giữ `low=incorrect`. G13 trong run này đạt đúng expected, nên không còn là failure của lượt hiện tại. Ngoài G06/G07/G12, chưa quan sát thấy phiên thiếu/sai bị cho completed, bằng chứng bịa được nhận, mất lượt ở ca lỗi giả lập, lộ đáp án hoặc vượt giới hạn probe. Đây là quan sát trên một lượt chạy, không phải bảo đảm tổng quát.
+G13 chỉ trích lại lời người học đã cung cấp, chưa thấy thêm đáp án mới từ hệ thống; ghi nhận vấn đề độ dài để sửa, không tự bổ sung một ngưỡng độ dài nhằm thay kết quả. Trong lượt này, chưa quan sát thấy phiên thiếu/sai bị cho completed, bằng chứng bịa được nhận, mất lượt ở ca lỗi giả lập hoặc vượt giới hạn probe. Đây là quan sát trên một lượt chạy, không phải bảo đảm tổng quát.
 
 ### Response ID và độ đầy đủ của log
 
 | Case ID | Response ID chính / căn cứ |
 |---|---|
-| G01 | `resp_048281a2c9d3ef62016aacb1ddcaac87d18bbe520f36164d47` |
-| G02 | `resp_0e3015b1906f9c8b016aacb1dfb8a487d19ccf82fcb4290b58` |
-| G03 | `resp_096f28a5b18c2e10016aacb1e43d6087d18dbd6d0eff7812ef` |
-| G04 | `resp_0b50943795cec45c016aacb1e9023487d184ea4fd8cad326cf` |
-| G05 | `resp_07aeadbb10d8b7f4016aacb1ee6a4087d1b45f041bedaa600e` |
-| G06 | `resp_056cca6e37524f42016aacb1f8bc7487d1a2fb2c9727908132`; audit `resp_0b35fddb15557c75016aacb1f3fee887d1b4dbc04d6f64dea` |
-| G07 | Chỉ ghi được AppError sau retry; chưa lưu response ID/raw response tại điểm lỗi |
-| G08 | `resp_0c6cb90b896bd572016aacb20dfee487d1b2b5ee38102a08b4` |
-| G09 | `resp_0c65dd3c16934b08016aacb214de0887d19356a1a52f09c6dc` |
-| G10 | `resp_048c4371c772d10a016aacb21b19bc87d18a9cd2a5359c63f3` |
-| G11 | `resp_0788ac138a68c3f3016aacb2212e2c87d19f0213f85f664d6d` |
-| G12 | Lượt 1 `resp_059e74a27c0f537d016aacb2265fb087d18a79cec8f5b08913`; lượt 2 `resp_06221d8e03fc8779016aacb234aac087d1b40164ac02c49614` và audit `resp_0cba39748bb517ae016aacb22fbcd487d1a5ea3bc322d2a4c3` |
-| G13 | `resp_035f9baeb7077516016aacb23bbbac87d1b45502500b2d2366` |
-| G14 | `resp_0ee0ebee7c9bc1df016aacb245269887d1adaf8d227169b08f` |
-| G15 | `resp_070ede00503de3b3016aacb246ff9887d19978e9a1110a93e0` |
-| G16 | `resp_0476727e28768848016aacb24c29cc87d19309f3fcf12714d2` |
-| G17 | Bốn lượt trong log; probe thứ 3 `resp_0f370687bf74e996016aacb25f68f087d1aee580142a0fffe7`, các response/audit ID nằm trong từng step |
+| G01 | `resp_004f62e1682d48f9016aaca8dc4d3487d1a4e1af4904d0b957` |
+| G02 | `resp_03c4fe106d4bf523016aaca8ddfef487d19c1270fe3c40eb5b` |
+| G03 | `resp_0fa223213e40356e016aaca8e411c087d1882d599e077b3d2e` |
+| G04 | `resp_0b7b0a7b0f0a831e016aaca8e94bb887d1b69e79724df554c4` |
+| G05 | `resp_0c284102196863d7016aaca8efb6a087d19acadd5602b4fb1d` |
+| G06 | `resp_08521120b1aea40d016aaca1c157ec87d1af5487567e7cc090` |
+| G07 | Chỉ ghi được AppError; chưa lưu response ID/raw response tại điểm lỗi |
+| G08 | Chỉ ghi được AppError; chưa lưu response ID/raw response tại điểm lỗi |
+| G09 | `resp_02c49c098230694c016aaca90883fc87d1bb117a9bd0011e12` |
+| G10 | Chỉ ghi được AppError; chưa lưu response ID/raw response tại điểm lỗi |
+| G11 | `resp_00e4b4929a0f3fb6016aaca9123c6087d195c0c7584c942140` |
+| G12 | `resp_08904392d44bdf2a016aaca916910087d18766bde35bfcf8f4`; lượt sửa lỗi đánh giá, không có response ID |
+| G13 | `resp_013e7faa36103596016aaca925880c87d1b70a4c6397103e1d` |
+| G14 | Chỉ ghi được AppError; chưa lưu response ID/raw response tại điểm lỗi |
+| G15 | `resp_07855c7951fe796016aaca930165c87d1861979cf36acf477` |
+| G16 | `resp_08d71d49c97a395a016aaca9353f3087d1943773a303c05235` |
+| G17 | Bốn lượt trong log; response/audit IDs nằm trong từng step, probe thứ 3: `resp_0e4285f762c7a8b3016aaca94611c087d1bcf083fef83399b4` |
 | G18 | `cases[id=G18].errors`: `Injected API timeout`; `retry_succeeded=true` |
 | G19 | `cases[id=G19].errors`: hai lỗi bằng chứng không hợp lệ |
 | G20 | `cases[id=G20].errors`: `missing_id`, `duplicate_id`, `unknown_id` |
 
-JSON gốc giữ `semantic_review=pending` vì runner không tự đánh giá chất lượng câu hỏi. Kết quả rà soát sau chạy nằm trong tài liệu này; run mới chưa có `review.json` riêng và không sửa log gốc để biến kết quả tự động thành kết quả đã duyệt. G07 không có raw response/response ID tại điểm lỗi, nên chưa thể kết luận field cụ thể gây lỗi normalize.
+JSON gốc giữ `semantic_review=pending` vì runner không tự đánh giá chất lượng câu hỏi. Kết quả rà soát sau chạy nằm trong tài liệu này; run mới chưa có `review.json` riêng và không sửa log gốc để biến kết quả tự động thành kết quả đã duyệt. Việc thiếu raw response ở sáu ca AppError chưa cho phép kết luận lỗi ở JSON/schema hay bước chuẩn hóa cụ thể.
 
 ### Lượt bị gián đoạn — lưu riêng, không ghép điểm
 
@@ -124,9 +124,10 @@ JSON gốc giữ `semantic_review=pending` vì runner không tự đánh giá ch
 
 ### Ưu tiên sửa và lần chạy tiếp theo
 
-1. **P0 — G07:** lưu response ID và stage normalize có cấu trúc để xác định field lỗi.
-2. **P1 — G06:** ổn định việc nhận diện `definition` khi cùng lượt có `sampling=met`.
-3. **P1 — G12:** xử lý phát biểu sửa sai rõ ràng; audit không giữ `low=incorrect` sau khi ý đã được sửa.
+1. **P0 — G06/G07/G08/G10/G12/G14:** ghi response ID và lỗi chuẩn hóa có cấu trúc, chẩn đoán trước khi sửa, không suy đoán nguyên nhân từ AppError chung.
+2. **P1 — G04/G05:** phân biệt thiếu/sai và gán đúng phát biểu vào tiêu chí `low` hoặc `definition`.
+3. **P1 — G12:** xử lý phát biểu sửa sai rõ ràng; audit không giữ contradiction đã được thay thế.
+4. **P2 — G13:** trích đúng nhận định mâu thuẫn thay vì nhắc lại toàn bộ câu trả lời.
 
 Lê Quang Ngọc phụ trách prompt/backend; Doãn Hữu Nguyên đối chiếu kết quả và câu hỏi hiển thị; Trần Hữu Đức chốt báo cáo sau khi nhóm duyệt. Đây là phân công theo spec, chưa phải xác nhận các thành viên đã chấm lượt này.
 

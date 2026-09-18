@@ -8,6 +8,8 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'codebase'))
 import app
 
 
@@ -111,6 +113,30 @@ class FlowTests(unittest.TestCase):
         self.assertEqual([{k:c[k] for k in ('id','status','evidence')} for c in actual], checks)
         self.assertTrue(all(c['points'] for c in actual))
         self.assertEqual(rid, 'resp_test')
+
+    def test_evaluator_failure_messages_identify_response_stage(self):
+        import io
+        messages = [{'role': 'user', 'text': 'Giải thích.'}]
+        responses = [
+            {'status': 'completed', 'id': 'invalid-json',
+             'output': [{'content': [{'type': 'output_text', 'text': '{'}]}]},
+            {'status': 'completed', 'id': 'missing-checks',
+             'output': [{'content': [{'type': 'output_text', 'text': '{}'}]}]},
+        ]
+        with patch.dict(app.os.environ, {'OPENAI_API_KEY': 'test-only'}), patch.object(
+                app, 'urlopen', side_effect=lambda *args, **kwargs: io.BytesIO(
+                    json.dumps(responses.pop(0)).encode())):
+            with self.assertRaisesRegex(app.AppError, 'JSON không hợp lệ'):
+                app.evaluate(messages, _retry=False)
+            with self.assertRaisesRegex(app.AppError, 'thiếu trường checks'):
+                app.evaluate(messages, _retry=False)
+
+        invalid = {'status': 'completed', 'id': 'invalid-rubric',
+                   'output': [{'content': [{'type': 'output_text', 'text': json.dumps({'checks': []})}]}]}
+        with patch.dict(app.os.environ, {'OPENAI_API_KEY': 'test-only'}), patch.object(
+                app, 'urlopen', return_value=io.BytesIO(json.dumps(invalid).encode())):
+            with self.assertRaisesRegex(app.AppError, 'không khớp rubric'):
+                app.evaluate(messages, _retry=False)
 
 
 class HTTPTests(unittest.TestCase):

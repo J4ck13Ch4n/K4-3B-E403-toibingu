@@ -15,7 +15,7 @@ import tempfile
 from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'codebase'))
+sys.path.insert(0, str(ROOT))
 import app
 
 
@@ -69,7 +69,7 @@ def run():
         'operator': 'Codex', 'semantic_reviewer': 'pending',
         'model': os.environ.get('OPENAI_MODEL', 'gpt-4.1-mini'),
         'git_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-        'sha256': {p: digest(p) for p in ['codebase/app.py', 'codebase/assessment.py', 'codebase/curriculum.py', 'tools/run_golden_set.py']},
+        'sha256': {p: digest(p) for p in ['app.py', 'assessment.py', 'curriculum.py', 'tools/run_golden_set.py']},
         'golden_set_sha256_before_run': digest('eval/golden-set.md'),
         'expected_status_order': order, 'expected': expected,
         'cases': [],

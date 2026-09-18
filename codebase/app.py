@@ -357,7 +357,7 @@ class Handler(BaseHTTPRequestHandler):
             static = {'/': ('index.html', 'text/html'), '/app.js': ('app.js', 'text/javascript'), '/style.css': ('style.css', 'text/css'), '/lessons.css': ('lessons.css', 'text/css')}
             if path in static:
                 name, mime = static[path]
-                return self.send(200, (ROOT / 'static' / name).read_bytes(), mime + '; charset=utf-8')
+                return self.send(200, (ROOT / 'codebase' / 'static' / name).read_bytes(), mime + '; charset=utf-8')
             raise AppError('Không tìm thấy.', 404)
         except AppError as exc:
             self.send(exc.status, {'error': str(exc)})

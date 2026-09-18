@@ -2,7 +2,7 @@
 import sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT))
+sys.path.insert(0,str(ROOT / 'codebase'))
 from curriculum import LESSONS
 
 lines=['# Checklist theo slide bài học', '', 'Biên soạn từ hai PDF trong `data/vlearn-pack/slides`. Số trang là vị trí PDF (bắt đầu từ 1), không phải số slide in ở chân trang. Câu hỏi và tiêu chí là diễn giải của nhóm. Không yêu cầu học thuộc tên model, giá hoặc số liệu thời điểm trên slide.', '', 'Tiến độ = số tiêu chí đạt / tổng tiêu chí bài học; trạng thái chưa kiểm tra tách riêng. Chỉ dùng trong phạm vi hackathon.', '']

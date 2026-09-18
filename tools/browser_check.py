@@ -5,7 +5,7 @@ import threading
 from pathlib import Path
 from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
-sys.path[:0]=[str(ROOT),str(ROOT/'runtime'/'browser')]
+sys.path[:0]=[str(ROOT/'codebase'),str(ROOT/'runtime'/'browser')]
 from playwright.sync_api import sync_playwright, expect
 import app
 

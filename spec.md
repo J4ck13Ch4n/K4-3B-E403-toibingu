@@ -164,14 +164,13 @@ Cập nhật sau test G17: với năm tiêu chí temperature mặc định và b
 
 | Chiều | Định nghĩa kiểm chứng được |
 |---|---|
-| Đúng đánh giá | Trạng thái từng tiêu chí khớp nhãn kỳ vọng; không có tiêu chí đạt khi còn ý bắt buộc thiếu/sai |
-| Có căn cứ | Mọi `met`/`incorrect` có bằng chứng từ đúng lời user; không lấy lời Mầm |
-| Hỏi gợi mở | Đúng một câu hỏi về ý còn thiếu/sai; không nêu sẵn cơ chế/đáp án cần kiểm tra; không lặp nguyên câu cũ |
-| Sửa sai | Ý sửa rõ ràng thay thế ý sai cũ; không xóa các phần đúng còn hợp lệ |
-| Kiểm soát phiên | Tối đa 3 probe/4 câu trả lời thành công; lỗi không tăng lượt; phiên kết thúc không nhận thêm lượt |
-| Minh bạch | Luyện tập khác chấm điểm; xem được nguồn ôn; tiến độ chưa kiểm tra không hiển thị như lỗi |
+| Coverage và correctness | Trạng thái từng tiêu chí khớp nhãn kỳ vọng; không có tiêu chí đạt khi còn ý bắt buộc thiếu/sai; phát biểu sửa rõ ràng thay thế ý sai cũ mà không xóa phần đúng |
+| Factuality và evidence | Mọi `met`/`incorrect` có bằng chứng từ đúng lời user; không lấy lời Mầm; không lộ đáp án trong câu hỏi gợi mở |
+| Safety và interaction control | Hỏi đúng một ý còn thiếu/sai, không lặp nguyên câu cũ; tối đa 3 probe/4 câu trả lời thành công; lỗi không tăng lượt; phiên kết thúc không nhận thêm lượt; tiến độ chưa kiểm tra không hiển thị như lỗi |
 
-**Golden set:** [eval/golden-set.md](eval/golden-set.md), 20 case: 10 ca phát triển từ 10 mã lượt thật (chỉ lưu câu tự biên soạn và mã nguồn), 10 ca tổng hợp cho sửa sai, ngộ nhận, injection và lỗi hệ thống. Các ca tích hợp có dependency giả lập để chủ động gây lỗi; các ca ngữ nghĩa phải gọi AI thật. Cần đối chiếu lại cơ cấu với guide §2.6 trước nộp vì chưa có guide tại repo.
+Ba chiều trên là các chiều chất lượng chính theo khung guide §2.6. Các mục “sửa sai”, “kiểm soát phiên” và “minh bạch” là điều kiện con dùng để chấm ba chiều, không phải các chiều độc lập.
+
+**Golden set:** [eval/golden-set.md](eval/golden-set.md), 20 case: 10 ca phát triển từ 10 mã lượt thật (chỉ lưu câu tự biên soạn và mã nguồn), 10 ca tổng hợp cho sửa sai, ngộ nhận, injection và lỗi hệ thống. Cả 4 lớp có ít nhất 2 case: lớp ① có G18–G20, lớp ② có G04/G05/G08/G14, lớp ③ có G15–G16, lớp ④ có G07/G09/G10/G11–G13/G17. Các ca tích hợp có dependency giả lập để chủ động gây lỗi; các ca ngữ nghĩa gọi AI thật. Cấu trúc này đáp ứng số lượng tối thiểu của guide §2.6, nhưng chưa có bảng User Input Grid riêng và chưa có bằng chứng lưu việc hai người chấm độc lập 5 output cùng tỷ lệ bất đồng.
 
 **Quality bar đề xuất chốt CP4:** đạt khi **ít nhất 18/20 ca (90%)** qua đầy đủ điều kiện của từng ca, đồng thời **không có lỗi nghiêm trọng**: xác nhận cả phiên đạt dù thiếu/sai ý; dùng bằng chứng bịa hoặc lời assistant; lộ đáp án trong ca kiểm tra gợi mở; làm mất lượt khi API lỗi; hỏi quá giới hạn. Mọi lỗi nghiêm trọng làm cả lượt chạy không đạt, kể cả tỷ lệ tổng ≥90%. Không giảm ngưỡng, bỏ ca khó hoặc sửa nhãn để khớp kết quả sau khi chốt.
 
@@ -181,12 +180,19 @@ Cập nhật sau test G17: với năm tiêu chí temperature mặc định và b
 
 | Ngày | Bộ kiểm tra | Kết quả | Giới hạn kết luận |
 |---|---|---|---|
-| 18/09/2026 | `python -m unittest discover -s tests -q` | **33/33 đạt (100%)** | Test logic, rubric, HTTP và tiến độ; dùng model giả lập, không phải độ chính xác AI |
-| 18/09/2026 | Golden set 20 ca, run `20260918T022749Z` | **10/20 đạt (50%) — chưa đạt** | 7/17 ca AI thật + 3/3 ca lỗi giả lập; G17 lộ đáp án. Tự động đạt 11/20, sau Codex đọc nội dung còn 10/20; chưa có người trong nhóm duyệt độc lập |
+| 18/09/2026 | `python -m unittest discover -s tests -q` | **37/37 đạt (100%)** | Test logic, rubric, HTTP và tiến độ; dùng model giả lập, không phải độ chính xác AI |
+| 18/09/2026 | Golden set 20 ca, run `20260918T022749Z` | **10/20 đạt (50%) — chưa đạt** | 7/17 ca AI thật + 3/3 ca lỗi giả lập; G17 lộ đáp án. Tự động đạt 11/20, sau Codex đọc nội dung còn 10/20; chưa có bằng chứng chấm độc lập theo guide |
 | 18/09/2026, sau sửa G17 | Test kỹ thuật / hồi quy chọn lọc `20260918T024258Z` | **36/36 test kỹ thuật; 6/7 ca chọn lọc đạt** | G17 đạt với AI thật; G13 vẫn sai nhãn. Chưa chạy lại toàn bộ 20 ca; không thay tỷ lệ baseline bằng tỷ lệ chọn lọc. Xem [báo cáo](eval/critical-fixes.md) |
+| 18/09/2026 | Golden set 20 ca, run `20260918T025830Z` | **12/20 đạt (60%) — chưa đạt** | Run trước đó; G17 không còn lộ đáp án nhưng G04/G05 sai nhãn, G06/G07/G08/G10/G12/G14 lỗi đánh giá không đầy đủ |
+| 18/09/2026 | Golden set 20 ca, run `20260918T031850Z` | **11/20 đạt (55%) — chưa đạt** | G04/G05/G06/G13/G15 mismatch nhãn; G07/G08/G10 lỗi evaluator không trả cấu trúc hợp lệ; G12 lỗi evaluator ở lượt sửa; G14 pass lại; chưa có `review.json` và chưa có bằng chứng chấm độc lập theo guide |
+| 18/09/2026 | Golden set 20 ca, run `20260918T033226Z` | **17/20 đạt (85%) — chưa đạt** | Run trước đó; còn G06/G07/G13 tại thời điểm đó |
+| 18/09/2026 | Golden set 20 ca, run `20260918T033656Z` | **17/20 đạt (85%) — chưa đạt** | G06 bỏ sót `definition`; G07 lỗi đánh giá không khớp rubric sau retry; G12 chưa chuyển `low` sang `met` sau sửa sai. 17 case còn lại đạt; chưa có `review.json` và chưa có bằng chứng chấm độc lập theo guide |
+| 18/09/2026 | Live smoke toàn bộ thư viện, `tools/smoke_all_lessons.py` | **10/15 section đạt (66,7%)** | 2 lesson, 15 section, 46 tiêu chí; dùng answer fixture ghép từ required points, không phải đo độ chính xác người học. Fail: Day 2 `problem`, `pair`, `workflows`, `metrics`, `decision`; log tại `runtime/lesson-library-live.json` |
 | Chưa có biên bản trong repo | Dùng thử với người ngoài nhóm | **Chưa có kết quả** | Chưa kết luận cải thiện học tập |
 
-Đã chạy `tools/run_golden_set.py` theo yêu cầu kiểm thử tiếp theo; [golden set](eval/golden-set.md) có kết quả từng ca, response IDs, log và rà soát sau chạy. Không sửa quality bar hoặc mã ứng dụng để thay kết quả. Các script smoke và log cục bộ trong `runtime/` không thay thế báo cáo golden set. [Nhật ký test kỹ thuật](eval/technical-tests.md) ghi cả lần có lỗi reset kết nối và lần chạy lại đạt 33/33. Chưa kiểm tra giao diện trình duyệt trong lượt này.
+Đã chạy lại `tools/run_golden_set.py`; [golden set](eval/golden-set.md) có archive run `20260918T033656Z`. Live smoke đã gọi model thật qua cả 15 section; kết quả chi tiết ở `runtime/lesson-library-live.json`. Không sửa quality bar hoặc mã ứng dụng để thay kết quả. Các script smoke và log cục bộ trong `runtime/` không thay thế báo cáo golden set. [Nhật ký test kỹ thuật](eval/technical-tests.md) ghi các lần chạy test kỹ thuật; lượt hiện tại đạt 37/37. Chưa kiểm tra giao diện trình duyệt trong lượt này.
+
+**Giải thích failure của run mới nhất:** G06 vẫn bỏ sót `definition` dù `sampling` đúng, cho thấy evaluator chưa ổn định khi nhận một câu trả lời có nhiều tiêu chí đạt. G07 vẫn trả lỗi `AI trả về đánh giá không khớp rubric` sau một lần retry; không có raw response/response ID để xác định field cụ thể. G12 đã nhận lượt sửa nhưng vẫn giữ `low=incorrect`, nên chưa chứng minh phát biểu sửa sai thay thế được mâu thuẫn cũ. G13 đã pass lại; các lỗi khác của run trước không tái hiện trong run này.
 
 ## §8. Phân công & kế hoạch
 
@@ -209,7 +215,7 @@ Cập nhật sau test G17: với năm tiêu chí temperature mặc định và b
 
 **Multi-prototype:** chưa có bằng chứng thử hai phương án độc lập. Phiên temperature và thư viện bài học là hai phạm vi nội dung của cùng cơ chế, không tự tính là hai prototype đã so sánh.
 
-**Tự khai phần chưa xong:** baseline golden set trước sửa là 10/20; G17 đã sửa và đạt khi chạy lại, nhưng chưa chạy lại đủ 20 ca hoặc xác nhận đạt quality bar. Các lỗi đánh giá khác, gồm G13 sai nhãn, tạm hoãn theo phạm vi ưu tiên; chưa có người trong nhóm duyệt độc lập; chưa có biên bản dùng thử 5 người; chưa xác minh hiệu quả học tập/thời gian tiết kiệm; chưa kiểm tra toàn bộ thư viện bằng model thật; chưa đối chiếu guide §2.6; chưa có bằng chứng các checkpoint đã được nộp. Mã nguồn hiện ở thư mục gốc, chưa theo cấu trúc `codebase/` gợi ý trong README. Phiên bản hiện tại phục vụ demo cục bộ một người dùng.
+**Tự khai phần chưa xong:** baseline golden set trước sửa là 10/20; run mới nhất đạt 17/20 (85%), vẫn dưới quality bar 18/20. G17 không còn lộ đáp án; còn G06 bỏ sót definition, G07 lỗi normalize sau retry và G12 chưa xử lý correction đúng. Golden set đã đủ số lượng, đủ 4 lớp và có 10 case phát triển từ chatlog theo guide §2.6, nhưng chưa có User Input Grid riêng và chưa có artifact ghi hai người chấm độc lập, 5 output cùng tỷ lệ bất đồng; metadata người rà soát trong báo cáo chưa đủ để kiểm chứng độc lập. Chưa có biên bản dùng thử 5 người; chưa xác minh hiệu quả học tập/thời gian tiết kiệm. Phiên bản hiện tại phục vụ demo cục bộ một người dùng.
 
 ## §9. Changelog
 
@@ -221,5 +227,10 @@ Cập nhật sau test G17: với năm tiêu chí temperature mặc định và b
 | 18/09/2026 | Bổ sung 20 case và chuẩn đề xuất 18/20, tách kết quả test kỹ thuật khỏi đánh giá AI | 33 test kỹ thuật đạt; golden set chưa có kết quả đầy đủ |
 | 18/09/2026 | Chạy đủ golden set; công bố 10/20 đạt, G17 lộ đáp án; giữ nguyên chuẩn 18/20 và không lỗi nghiêm trọng | Run `20260918T022749Z`, `eval/golden-set.md`, `review.json`; ghi riêng lượt bị gián đoạn và hai lần test kỹ thuật |
 | 18/09/2026 | Chặn câu hỏi model tự sinh ở phạm vi temperature bằng mẫu theo từng ý; thêm test hồi quy lộ đáp án; tạm hoãn lỗi khác | G17 baseline; 36/36 test kỹ thuật, run chọn lọc `20260918T024258Z` đạt 6/7, riêng G17 đạt. Không thay chuẩn hoặc bộ ca |
+| 18/09/2026 | Đối chiếu golden set với `02-guide.md` §2.6 và cập nhật kết quả run đủ 20 ca | Golden set đạt yêu cầu số lượng/độ phủ tối thiểu nhưng chưa đạt quality bar: run `20260918T025830Z` đạt 12/20; bổ sung các điểm thiếu về User Input Grid và bằng chứng chấm độc lập |
+| 18/09/2026 | Chạy lại full golden set và phân loại failure | Run `20260918T031850Z` đạt 11/20; ghi nguyên nhân mismatch nhãn riêng với lỗi evaluator chưa đủ log, không suy đoán nguyên nhân con |
+| 18/09/2026 | Sửa prompt ngắn, thêm retry một lần cho lỗi normalize và chẩn đoán stage phản hồi | Test kỹ thuật 37/37; run `20260918T033226Z` đạt 17/20. Không đổi expected hoặc quality bar; còn G06/G07/G13 |
+| 18/09/2026 | Chạy lại full golden set sau các sửa trên | Run `20260918T033656Z` đạt 17/20; G13 đã pass lại, còn G06/G07/G12. Không đổi expected hoặc quality bar |
+| 18/09/2026 | Kiểm tra live toàn bộ thư viện bằng model thật | `tools/smoke_all_lessons.py` gọi 15 section; 10 pass, 5 section Day 2 cần rà lại rubric/evaluator. Không trộn kết quả này vào golden set 20 case |
 
 Các thay đổi trên là rà soát tài liệu và mã nguồn, không phải feedback người dùng. Sau validation, bổ sung dòng có mã người thử/case tương ứng; sau CP4 chỉ cập nhật kết quả và thay đổi triển khai, giữ nguyên chuẩn đã chốt.

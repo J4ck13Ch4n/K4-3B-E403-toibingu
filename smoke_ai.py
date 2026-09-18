@@ -1,5 +1,7 @@
 """One real API call; uses .env without printing credentials."""
 import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'codebase'))
 import app
 
 try:
